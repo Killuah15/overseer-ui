@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import logo from '../public/logo.svg';
 import '../public/styles/App.scss';
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { gql } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import gql from 'graphql-tag';
 
 export const client = new ApolloClient({
   uri: 'https://overseer-db.herokuapp.com/overseer/dev' //TODO add own GraphQL URI to the ApolloClient
