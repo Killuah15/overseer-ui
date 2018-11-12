@@ -1,8 +1,23 @@
-import ApolloClient from 'apollo-boost';
+import ApolloClient from 'apollo-boost'
 
 const client = new ApolloClient({
-    uri: 'https://glacial-hollows-99325.herokuapp.com/'
-  });
+    uri: 'http://localhost:4000',
+    fetchOptions: {
+      credentials: 'include'
+    },
+    request: async (operation) => {
+      const token = await sessionStorage.getItem('token')
+
+      operation.setContext({
+        headers: {
+          authorization: token ? `Bearer ${token}` : ''
+        }
+      })
+    }
+  })
+
+  //request: nimmt sich bei jeder Query/Mutation/Subscription aus dem SessionStorage den token und sendet ihn im express - request object mit
+  //fetchOptions: credentials: 'include' um cookies mit zu senden (wahrscheinlich gar nicht nötig, aber nice to have)
 
   /* 
   NOTE:

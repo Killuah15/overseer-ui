@@ -1,3 +1,4 @@
+import '@babel/polyfill/noConflict'
 import React, { Component } from "react"
 import logo from "../public/logo.svg"
 import "../public/styles/App.scss"
@@ -5,20 +6,21 @@ import client from "../apollo/client"
 import { gql } from 'apollo-boost'
 import { ApolloProvider } from "react-apollo"
 
-//TESTING A QUERY - WORKS
-/* client
-  .query({
-    query: gql`
-      {
-        users {
-          id
-          name
-        }
-      }
-    `
+//TESTING A MUTATION - WORKS
+/* const signup = gql`
+  mutation {
+    login(data: { email: "riesen.bla@web.de", password: "123456789" }) {
+      token
+    }
+  }
+`
+
+client
+  .mutate({
+    mutation: signup
   })
   .then(result => {
-    console.log(result)
+    sessionStorage.setItem('token', result.data.login.token)
   }) */
 
 class App extends Component {

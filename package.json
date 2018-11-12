@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "apollo-boost": "^0.1.17",
     "graphql": "^14.0.2",
     "react": "^16.5.2",
