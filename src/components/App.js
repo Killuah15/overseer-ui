@@ -1,10 +1,9 @@
-import '@babel/polyfill/noConflict'
 import React, { Component } from "react"
 import logo from "../public/logo.svg"
-import "../public/styles/App.scss"
 import client from "../apollo/client"
 import { gql } from 'apollo-boost'
 import { ApolloProvider } from "react-apollo"
+import "../public/styles/App.scss"
 
 //TESTING A MUTATION - WORKS
 /* const signup = gql`
