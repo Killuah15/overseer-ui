@@ -6,6 +6,7 @@ const client = new ApolloClient({
       credentials: 'include'
     },
     request: async (operation) => {
+      //will be fetched on each query, so after login it should be okay
       const token = await sessionStorage.getItem('token')
 
       operation.setContext({

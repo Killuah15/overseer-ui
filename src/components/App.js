@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 import logo from "../public/logo.svg"
 import client from "../apollo/client"
-import { gql } from 'apollo-boost'
 import { ApolloProvider } from "react-apollo"
 import "../public/styles/App.scss"
+
+import { LOGIN } from '../apollo/templates/Mutations';
 
 //TESTING A MUTATION - WORKS
 /* const signup = gql`
@@ -13,10 +14,19 @@ import "../public/styles/App.scss"
     }
   }
 `
+ */
+/* 
+NOTE: LOGIN mit input variablen (TODO: benutzen von Mutation react-apollo Components wäre cooler)
 
 client
   .mutate({
-    mutation: signup
+    mutation: LOGIN,
+    variables: {
+      data:{
+        email: "riesen.bla@web.de",
+        password: "123456789"
+      }
+    }
   })
   .then(result => {
     sessionStorage.setItem('token', result.data.login.token)

@@ -1,1 +1,1 @@
-//TODO: write some Query templates to work with
+import { gql } from 'apollo-boost'
