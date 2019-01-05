@@ -1,10 +1,11 @@
-import React, { Component } from "react"
-import logo from "../public/logo.svg"
-import client from "../apollo/client"
-import { ApolloProvider } from "react-apollo"
-import "../public/styles/App.scss"
+import React, { Component } from 'react'
+import logo from '../public/logo.svg'
+import client from '../apollo/client'
+import { ApolloProvider, Query, Mutation } from 'react-apollo'
+import '../public/styles/App.scss'
 
-import { LOGIN } from '../apollo/templates/Mutations';
+import { LOGIN } from '../apollo/templates/Mutations'
+import { USERS, EVENTS } from '../apollo/templates/Queries'
 
 //TESTING A MUTATION - WORKS
 /* const signup = gql`
@@ -15,7 +16,7 @@ import { LOGIN } from '../apollo/templates/Mutations';
   }
 `
  */
- 
+
 //NOTE: LOGIN mit input variablen (TODO: benutzen von Mutation react-apollo Components wäre cooler)
 
 /* client
@@ -40,9 +41,15 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
+            <Query query={ EVENTS }>
+              {({ loading, error, data }) => {
+                if (loading) return `loading...`
+                if (error) return `Error! ${error.message}`
+
+                const { events } = data
+                return events.map(event => <h1>{event.title}</h1>)
+              }}
+            </Query>
             <a
               className="App-link"
               href="https://reactjs.org"
