@@ -15,10 +15,10 @@ import { LOGIN } from '../apollo/templates/Mutations';
   }
 `
  */
-/* 
-NOTE: LOGIN mit input variablen (TODO: benutzen von Mutation react-apollo Components wäre cooler)
+ 
+//NOTE: LOGIN mit input variablen (TODO: benutzen von Mutation react-apollo Components wäre cooler)
 
-client
+/* client
   .mutate({
     mutation: LOGIN,
     variables: {
@@ -30,6 +30,7 @@ client
   })
   .then(result => {
     sessionStorage.setItem('token', result.data.login.token)
+    console.log(sessionStorage.getItem('token'));
   }) */
 
 class App extends Component {
