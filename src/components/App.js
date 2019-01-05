@@ -47,7 +47,7 @@ class App extends Component {
                 if (error) return `Error! ${error.message}`
 
                 const { events } = data
-                return events.map(event => <h1>{event.title}</h1>)
+                return events.map(event => <h1 key={event.id}>{event.title}</h1>)
               }}
             </Query>
             <a

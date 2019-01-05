@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-boost'
 
 const client = new ApolloClient({
-    uri: 'https://overseer-db.herokuapp.com/overseer-db/dev',
+    uri: 'http://localhost:4000',
     fetchOptions: {
       credentials: 'include'
     },
@@ -12,7 +12,7 @@ const client = new ApolloClient({
       operation.setContext({
         headers: {
           //authorization: token ? `Bearer ${token}` : ''
-          authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJvdmVyc2Vlci1kYkBkZXYiLCJyb2xlcyI6WyJhZG1pbiJdfSwiaWF0IjoxNTQ2NzA0OTIzLCJleHAiOjE1NDczMDk3MjN9.tMK4LgHJuqFWI9s0sg1z8cuz0lrJCwvf5rreWWnzbRc"
+          authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjanFqcmVsMmwwMGNkMDkyNG5wZ3JjbWVrIiwiaWF0IjoxNTQ2NzEwMzUwLCJleHAiOjE1NDY4ODMxNTB9.pTdbIZOIM78Olhrhuw2hfum0SnyCCrsHBxXw74fvlow'
         }
       })
     }
