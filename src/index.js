@@ -1,7 +1,7 @@
 import '@babel/polyfill/noConflict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
+//import 'bootstrap/dist/css/bootstrap.min.css'
 import './public/styles/index.css'
 import App from './components/App'
 import * as serviceWorker from './serviceWorker'

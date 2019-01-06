@@ -7,6 +7,15 @@ import '../public/styles/App.scss'
 import { LOGIN } from '../apollo/templates/Mutations'
 import { USERS, EVENTS } from '../apollo/templates/Queries'
 
+
+//DUMMYDB BENUTZEN
+/* 
+import users from '../dummyDB';
+
+DUMMYDB Benutzung z.b. so um das 2te Projekt zu fetchen:
+console.log(users[0].projects[1]);
+*/
+
 //TESTING A MUTATION - WORKS
 /* const signup = gql`
   mutation {
@@ -38,28 +47,30 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <Query query={ EVENTS }>
-              {({ loading, error, data }) => {
-                if (loading) return `loading...`
-                if (error) return `Error! ${error.message}`
+          <div className="App">
+            <header className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <Query query={EVENTS}>
+                {({ loading, error, data }) => {
+                  if (loading) return `loading...`
+                  if (error) return `Error! ${error.message}`
 
-                const { events } = data
-                return events.map(event => <h1 key={event.id}>{event.title}</h1>)
-              }}
-            </Query>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
+                  const { events } = data
+                  return events.map(event => (
+                    <h1 key={event.id}>{event.title}</h1>
+                  ))
+                }}
+              </Query>
+              <a
+                className="App-link"
+                href="https://reactjs.org"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn React
+              </a>
+            </header>
+          </div>
       </ApolloProvider>
     )
   }
