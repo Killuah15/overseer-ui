@@ -7,15 +7,6 @@ import '../public/styles/App.scss'
 import { LOGIN } from '../apollo/templates/Mutations'
 import { USERS, EVENTS } from '../apollo/templates/Queries'
 
-
-//DUMMYDB BENUTZEN
-/* 
-import users from '../dummyDB';
-
-DUMMYDB Benutzung z.b. so um das 2te Projekt zu fetchen:
-console.log(users[0].projects[1]);
-*/
-
 //TESTING A MUTATION - WORKS
 /* const signup = gql`
   mutation {
