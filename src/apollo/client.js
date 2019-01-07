@@ -2,9 +2,6 @@ import ApolloClient from 'apollo-boost'
 
 const client = new ApolloClient({
     uri: 'http://localhost:4000',
-    fetchOptions: {
-      credentials: 'include'
-    },
     request: async (operation) => {
       //will be fetched on each query, so after login it should be okay
       const token = await sessionStorage.getItem('token')
@@ -13,10 +10,14 @@ const client = new ApolloClient({
         headers: {
           //authorization: token ? `Bearer ${token}` : ''
           authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjanFqcmVsMmwwMGNkMDkyNG5wZ3JjbWVrIiwiaWF0IjoxNTQ2NzEwMzUwLCJleHAiOjE1NDY4ODMxNTB9.pTdbIZOIM78Olhrhuw2hfum0SnyCCrsHBxXw74fvlow'
+        },
+        fetchOptions: {
+          credentials: 'include'
         }
       })
     }
   })
+
 
   //request: nimmt sich bei jeder Query/Mutation/Subscription aus dem SessionStorage den token und sendet ihn im express - request object mit
   //fetchOptions: credentials: 'include' um cookies mit zu senden (wahrscheinlich gar nicht nötig, aber nice to have)

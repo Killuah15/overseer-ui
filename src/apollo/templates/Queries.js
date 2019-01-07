@@ -18,3 +18,12 @@ export const EVENTS = gql`
         }
     }
 `
+
+export const PROJECTS = gql`
+{
+    projects{
+        id
+        title
+    }
+}
+`
