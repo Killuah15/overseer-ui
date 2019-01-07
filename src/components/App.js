@@ -23,9 +23,9 @@ client
   .mutate({
     mutation: LOGIN,
     variables: {
-      data:{
-        email: "robin.duerhager@web.de",
-        password: "12345678"
+      data: {
+        email: 'robin.duerhager@web.de',
+        password: '12345678'
       }
     }
   })
@@ -34,7 +34,7 @@ client
     //console.log(sessionStorage.getItem('token'));
   })
 
- /*  client
+/*  client
   .mutate({
     mutation: CP,
     variables: {
@@ -49,45 +49,56 @@ class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-          <div className="App">
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <Query query={PROJECTS}>
-                {({ loading, error, data }) => {
-                  if (loading) return `loading...`
-                  if (error) return `Error! ${error.message}`
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <Query query={PROJECTS}>
+              {({ loading, error, data }) => {
+                if (loading) return `loading...`
+                if (error) return `Error! ${error.message}`
 
-                  const { projects } = data
-                  return projects.map(project => (
-                    <h1 key={project.id}>{project.title}</h1>
-                  ))
-                }}
-              </Query>
-              <Mutation mutation={CP}>
-                {(createProject, { data }) => (
-                  <div>
-                    <form
+                const { projects } = data
+                return projects.map(project => (
+                  <h1 key={project.id}>{project.title}</h1>
+                ))
+              }}
+            </Query>
+            <Mutation
+              mutation={CP}
+              update={(cache, { data: { createProject } }) => {
+                const { projects } = cache.readQuery({ query: PROJECTS })
+
+                cache.writeQuery({
+                  query: PROJECTS,
+                  data: {
+                    projects: projects.concat(createProject)
+                  }
+                })
+              }}
+            >
+              {createProject => (
+                <div>
+                  <form
                     onSubmit={async e => {
-                      e.preventDefault();
-                      await createProject({ variables: { title: 'bla2' }})
-                      console.log(`data: ${data}`);
+                      e.preventDefault()
+                      await createProject({ variables: { title: 'bla2' } })
                     }}
-                    >
+                  >
                     <button type="submit">createProject</button>
-                    </form>
-                  </div>
-                )}
-              </Mutation>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
-            </header>
-          </div>
+                  </form>
+                </div>
+              )}
+            </Mutation>
+            <a
+              className="App-link"
+              href="https://reactjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn React
+            </a>
+          </header>
+        </div>
       </ApolloProvider>
     )
   }
