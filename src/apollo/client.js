@@ -2,9 +2,6 @@ import ApolloClient from 'apollo-boost'
 
 const client = new ApolloClient({
     uri: 'http://localhost:4000',
-    fetchOptions: {
-      credentials: 'include'
-    },
     request: async (operation) => {
       //will be fetched on each query, so after login it should be okay
       const token = await sessionStorage.getItem('token')
@@ -12,6 +9,9 @@ const client = new ApolloClient({
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : ''
+        },
+        fetchOptions: {
+          credentials: 'include'
         }
       })
     }
