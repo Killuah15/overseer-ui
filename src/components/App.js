@@ -25,7 +25,7 @@ client
     variables: {
       data: {
         email: 'robin.duerhager@web.de',
-        password: '12345678'
+        password: '123456789'
       }
     }
   })
