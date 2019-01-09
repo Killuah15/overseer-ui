@@ -1,10 +1,18 @@
-.App {
-  text-align: center;
+
+body {
+  background-color: #282c34 !important;
+  font-family: 'Lato', sans-serif;
+
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+button{
+  cursor: pointer;
+}
+
+
+.App {
+  text-align: center;
+  color: white;
 }
 
 .App-header {
@@ -22,11 +30,295 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.eventInfo {
+  margin-top: 2rem;
+  color: white;
+}
+
+.Events {
+  margin-top: 2rem;
+  color: white;
+
+}
+
+.eventsArea{
+  overflow: auto;
+  height: 60vh;
+
+  
+}
+
+#style-1::-webkit-scrollbar-track
+{
+	border-radius: 1rem;
+	background-color: #191b20;
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 0.5rem;
+	background-color: #282c34;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+	border-radius: 1rem;
+	background-color: #4d5464;
+}
+
+
+img{
+  width: 12rem;
+}
+
+.trashIcon{
+  width: 2rem;
+}
+
+.Login {
+  margin: auto;
+  margin-top: 8rem;
+  padding: 3rem 2rem 3rem 2rem;
+  color: white;
+  border-radius: .5rem;
+  background-color: #444c58;
+
+  -webkit-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
+}
+
+.loginInner {
+  margin-top: 1rem;
+}
+
+.loginTextLabel,
+.loginInputLabel {
+  font-family: 'Lato', sans-serif;
+  margin: auto;
+  padding: 0 1rem 0 1rem;
+}
+
+.loginTextLabel {
+  color: white;
+}
+
+.loginInputLabel {
+  color: white;
+}
+
+.buttonWrapper{
+  width: 30%;
+}
+
+.loginButton,
+.registerButton,
+.acceptButton {
+  color: white;
+  border-radius: 15rem;
+  border-style: none;
+  padding: 1rem;
+  cursor: pointer;
+  width: 100%;
+ 
+ 
+}
+
+.loginButton,
+.acceptButton {
+  margin-top: 1.5rem;
+  color: white;
+}
+
+.loginButton {
+  background-color: #52a600;
+}
+
+.loginButton:hover {
+  background-color: #6cd404;
+}
+
+.acceptButton {
+  background-color: #069adf;
+}
+
+.acceptButton:hover {
+  background-color: #3bc1ff;
+}
+
+.registerButton{
+  margin-top: 1rem;
+  color: white;
+  background-color: transparent;
+  border-style: solid;
+  border-color: #069adf;
+  border: 2;
+  font-size: .8rem;
+}
+
+.registerButton:hover{
+  border-color: #69cfff;
+}
+
+input{
+  background-color: #c7c7c7;
+  border-style: none;
+  padding: .5rem;
+  padding-left: 1rem;
+  width: 100%;
+}
+
+.loginWrapper{
+  width: 40%;
+  margin: auto;
+}
+
+.formHeader{
+  font-family: 'MedievalSharp', cursive;
+  color:#C7C7C7;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+}
+
+#mainHeader{
+  font-size: 3rem;
+}
+
+.ProjectView{
+  margin-top: 5rem;
+}
+
+.Project{
+  background-color: #545f75;
+  margin: auto;
+  width: 50%;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.createButtonDefault,
+.createButtonCombat,
+.createButtonQuest {
+  font-family: 'Lato', sans-serif;
+  color: white;
+  border: 0;
+  border-radius: 15rem;
+  margin-top: 2rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  padding: 1rem;
+}
+
+.createButtonDefault{
+  background-color: #545f75;
+}
+
+.createButtonDefault:hover{
+  background-color: #7b8497;
+}
+
+.createButtonCombat {
+  background-color: #cd4a25;
+}
+
+.createButtonCombat:hover{
+  background-color: #f3734f;
+}
+
+.createButtonQuest {
+  background-color: #5c9d24;
+}
+
+.createButtonQuest:hover {
+  background-color: #78c534;
+}
+
+.target {
+  background: lightslategray;
+  padding: 1rem;
+  color: white;
+  border-radius: 0.5rem;
+  float: right;
+  margin-bottom: 2rem;
+}
+
+.Monster {
+  font-family: 'Lato', sans-serif;
+  background-color:#414857;
+  border-style: solid;
+  border-color: #cd4a25;
+  color: white;
+}
+
+.MonsterStats {
+  font-family: 'Lato', sans-serif;
+  color: white;
+}
+
+.Events h1{
+  font-family: 'MedievalSharp', cursive;
+
+}
+
+.eventDefault,
+.eventDefaultChecked,
+.eventCombat,
+.eventCombatChecked,
+.eventQuest,
+.eventQuestChecked {
+  font-family: 'Lato', sans-serif;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.3rem;
+  background-color: #545f75;
+  color: white;
+  cursor: move;
+}
+
+.eventDefaultChecked,
+.eventCombatChecked,
+.eventQuestChecked {
+  background-color: #3a4250;
+  color: #a4a4a4;
+}
+
+.eventCombat {
+  background-color: #cd4a25;
+}
+
+.eventCombatChecked {
+  background-color: #832f18;
+}
+
+.eventQuest {
+  background-color: #5c9d24;
+}
+
+.eventQuestChecked {
+  background-color: #2f5112;
+}
+
+.checkedButton,
+.infoButton {
+  color: lightgray;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  float: right;
+}
+
+.infoButton {
+  float: left;
+}
+
+.checkedButton:focus,
+.infoButton:focus,
+.loginButton:focus,
+.acceptButton:focus,
+.registerButton:focus,
+.createButtonCombat:focus,
+.createButtonDefault:focus,
+.createButtonQuest:focus {
+  outline: none;
 }
