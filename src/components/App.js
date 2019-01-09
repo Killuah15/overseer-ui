@@ -1,3 +1,4 @@
+import '@babel/polyfill/noConflict'
 import React, { Component } from 'react';
 import '../public/styles/App.css';
 import { Button, Grid, Row, Col, Clearfix, Panel } from 'react-bootstrap';
@@ -8,7 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { NavLink } from 'react-router-dom';
 import { DragDropContext } from 'react-dnd'
 import { ApolloProvider } from "react-apollo"
-import { client } from '../apollo/client';
+import client from '../apollo/client';
 const update = require('immutability-helper');
 
 
