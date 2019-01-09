@@ -1,4 +1,3 @@
-import '@babel/polyfill/noConflict'
 import React, { Component } from 'react';
 import '../public/styles/App.css';
 import { Button, Grid, Row, Col, Clearfix, Panel } from 'react-bootstrap';
@@ -8,8 +7,6 @@ import Monster from './Monster';
 import HTML5Backend from 'react-dnd-html5-backend'
 import { NavLink } from 'react-router-dom';
 import { DragDropContext } from 'react-dnd'
-import { ApolloProvider } from "react-apollo"
-import client from '../apollo/client';
 const update = require('immutability-helper');
 
 
@@ -119,7 +116,6 @@ class App extends Component {
   render() {
 
     return (
-      <ApolloProvider client={client}>
       <div className="App">
 
       <NavLink to="/Projects">Back</NavLink>
@@ -191,7 +187,7 @@ class App extends Component {
 
 
       </div>
-      </ApolloProvider>
+      
     );
   }
 }
