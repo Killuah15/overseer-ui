@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Mutation, renderToStringWithData } from 'react-apollo';
 import { LOGIN } from '../apollo/templates/Mutations';
 import { MagicSpinner } from 'react-spinners-kit';
+import ErrorMessage from '../apollo/ErrorMessage';
 import eye_logo from './img/eye_logo.png';
 
 let mailInput = true;
@@ -74,8 +75,11 @@ class Login extends React.Component {
           <div className="buttonWrapper">
             <NavLink to="/Register" className="" onClick={(e) => {
               console.log('Login')
-            }}><center><button className="registerButton">sign up</button>
-                <MagicSpinner size={50} color="#6cd404" loading={loading} /></center></NavLink>
+            }}><center><button className="registerButton">sign up</button></center></NavLink>
+            <center>
+              <MagicSpinner size={50} color="#6cd404" loading={loading} />
+              <ErrorMessage error={error} message={"Unable to Login"} />
+            </center>
           </div>
         </center>
         </form>
