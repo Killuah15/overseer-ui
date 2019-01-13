@@ -1,86 +1,82 @@
-
 body {
   background-color: #282c34 !important;
-  font-family: 'Lato', sans-serif;
-
+  font-family: "Lato", sans-serif;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
+form {
+  display: inline;
+}
 
 .App {
   text-align: center;
   color: white;
 }
 
-.App-header {
+.navButton {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: transparent;
+  color: #8b94a1;
+  border-style: solid;
+  border-width: 0.2rem;
+  border-color: #444c58;
+}
+
+.navButton:hover {
+  color: #bfc7d3;
+  border-color: #6c7788;
+}
+
+select {
+  width: 25%;
+  padding: 1rem;
+  background: #282c34;
+  color: #fff;
+  font-family: "Lato", sans-serif;
+  font-size: 2rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ----     Scrollbar     ----*/
+
+#style-1::-webkit-scrollbar-track {
+  border-radius: 1rem;
+  background-color: #191b20;
+}
+
+#style-1::-webkit-scrollbar {
+  width: 0.5rem;
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#style-1::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background-color: #4d5464;
 }
 
-.eventInfo {
-  margin-top: 2rem;
-  color: white;
-}
+/* ----     IMG     ----*/
 
-.Events {
-  margin-top: 2rem;
-  color: white;
-
-}
-
-.eventsArea{
-  overflow: auto;
-  height: 60vh;
-
-  
-}
-
-#style-1::-webkit-scrollbar-track
-{
-	border-radius: 1rem;
-	background-color: #191b20;
-}
-
-#style-1::-webkit-scrollbar
-{
-	width: 0.5rem;
-	background-color: #282c34;
-}
-
-#style-1::-webkit-scrollbar-thumb
-{
-	border-radius: 1rem;
-	background-color: #4d5464;
-}
-
-
-img{
+img {
   width: 12rem;
 }
 
-.trashIcon{
+.trashIcon {
   width: 2rem;
 }
+
+/* ----     LOGIN     ----*/
 
 .Login {
   margin: auto;
   margin-top: 8rem;
   padding: 3rem 2rem 3rem 2rem;
   color: white;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   background-color: #444c58;
 
   -webkit-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
@@ -94,7 +90,7 @@ img{
 
 .loginTextLabel,
 .loginInputLabel {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   margin: auto;
   padding: 0 1rem 0 1rem;
 }
@@ -107,7 +103,7 @@ img{
   color: white;
 }
 
-.buttonWrapper{
+.buttonWrapper {
   width: 30%;
 }
 
@@ -120,8 +116,6 @@ img{
   padding: 1rem;
   cursor: pointer;
   width: 100%;
- 
- 
 }
 
 .loginButton,
@@ -146,95 +140,158 @@ img{
   background-color: #3bc1ff;
 }
 
-.registerButton{
+.registerButton {
   margin-top: 1rem;
   color: white;
   background-color: transparent;
   border-style: solid;
   border-color: #069adf;
   border: 2;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
-.registerButton:hover{
+.registerButton:hover {
   border-color: #69cfff;
 }
 
-input{
+input {
   background-color: #c7c7c7;
   border-style: none;
-  padding: .5rem;
+  padding: 0.5rem;
   padding-left: 1rem;
   width: 100%;
 }
 
-.loginWrapper{
+.loginWrapper {
   width: 40%;
   margin: auto;
 }
 
-.formHeader{
-  font-family: 'MedievalSharp', cursive;
-  color:#C7C7C7;
+.formHeader {
+  font-family: "Merriweather", serif;
+  color: #c7c7c7;
   text-align: center;
   font-size: 2rem;
   margin-bottom: 3rem;
 }
 
-#mainHeader{
+#mainHeader {
   font-size: 3rem;
 }
 
-.ProjectView{
+/* ----     PROJECT     ----*/
+
+.ProjectView {
   margin-top: 5rem;
 }
 
-.Project{
+.Project {
   background-color: #545f75;
   margin: auto;
   width: 50%;
   margin-bottom: 1rem;
   padding: 1rem;
-}
-
-.createButtonDefault,
-.createButtonCombat,
-.createButtonQuest {
-  font-family: 'Lato', sans-serif;
+  border-radius: 0.2rem;
   color: white;
-  border: 0;
-  border-radius: 15rem;
+
+  -webkit-box-shadow: 0px 0px 40px -6px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 40px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 40px -6px rgba(0, 0, 0, 0.75);
+}
+
+.ProjectName {
+  font-family: "Merriweather", serif;
+  color: white;
+}
+
+.ProjectType {
+  font-family: "Lato", sans-serif;
+  color: #282c34;
+}
+
+.ProjectView button {
+  border-style: none;
+  font-size: 1.5rem;
   margin-top: 2rem;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
-  padding: 1rem;
+  margin-bottom: 0;
+  float: none;
+  background-color: #c7c7c7;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  color: #282c34;
+  cursor: pointer;
 }
 
-.createButtonDefault{
+.ProjectView button:hover {
+  background-color: #f3f3f3;
+}
+
+.ProjectModal {
+  padding: 3rem 2rem 3rem 2rem;
+  margin: auto;
+  margin-top: 15rem;
+  width: 60%;
+  border-radius: 0.5rem;
   background-color: #545f75;
+  -webkit-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
 }
 
-.createButtonDefault:hover{
-  background-color: #7b8497;
+.ProjectModal button {
+  background-color: transparent;
+  border-style: none;
+  float: right;
+  margin-bottom: 4rem;
 }
 
-.createButtonCombat {
-  background-color: #cd4a25;
+.ProjectModal button:hover {
+  color: white;
 }
 
-.createButtonCombat:hover{
-  background-color: #f3734f;
+.ProjectModal label {
+  margin-top: 0.5rem;
+  color: rgb(255, 144, 144);
 }
 
-.createButtonQuest {
+.ProjectModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #191b20b7;
+}
+
+.radio label {
+  font-family: "Lato", sans-serif;
+  font-size: 1.1rem;
+  color: #282c34;
+}
+
+input[type="radio"] + span {
+  border-radius: 50%;
+}
+
+#createProject {
+  border-style: none;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  float: none;
   background-color: #5c9d24;
+  padding: 0.5rem 1rem;
+  border-radius: 15rem;
+  color: white;
+  cursor: pointer;
 }
 
-.createButtonQuest:hover {
+#createProject:hover {
   background-color: #78c534;
 }
 
-.target {
+/* ----     TRASH     ----*/
+
+.Trash {
   background: lightslategray;
   padding: 1rem;
   color: white;
@@ -243,22 +300,55 @@ input{
   margin-bottom: 2rem;
 }
 
+/* ----     MONSTER     ----*/
+
 .Monster {
-  font-family: 'Lato', sans-serif;
-  background-color:#414857;
+  padding: 1rem;
+  font-family: "Lato", sans-serif;
+  background-color: #424857;
   border-style: solid;
+  border-width: 0.1rem;
   border-color: #cd4a25;
   color: white;
 }
 
 .MonsterStats {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   color: white;
 }
 
-.Events h1{
-  font-family: 'MedievalSharp', cursive;
+.Monster h5 {
+  font-family: "Merriweather", serif;
+}
 
+.Monster button {
+  color: rgb(172, 172, 172);
+  background-color: transparent;
+  border-style: none;
+}
+
+/* ----     EVENTS     ----*/
+
+.eventInfo {
+  margin-top: 2rem;
+  color: white;
+}
+
+.Events {
+  margin: auto;
+  margin-top: 2rem;
+  margin-left: 3rem;
+  color: white;
+}
+
+.eventsArea {
+  margin: auto;
+  overflow: auto;
+  height: 55vh;
+}
+
+.Events h1 {
+  font-family: "Merriweather", serif;
 }
 
 .eventDefault,
@@ -267,13 +357,17 @@ input{
 .eventCombatChecked,
 .eventQuest,
 .eventQuestChecked {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   padding: 0.5rem 1rem;
   margin-bottom: 0.5rem;
   border-radius: 0.3rem;
   background-color: #545f75;
   color: white;
   cursor: move;
+
+  -webkit-box-shadow: 0px 0px 30px -6px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 30px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 30px -6px rgba(0, 0, 0, 0.75);
 }
 
 .eventDefaultChecked,
@@ -299,6 +393,43 @@ input{
   background-color: #2f5112;
 }
 
+.createButtonDefault,
+.createButtonCombat,
+.createButtonQuest {
+  font-family: "Lato", sans-serif;
+  color: white;
+  border: 0;
+  border-radius: 15rem;
+  margin-top: 2rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  padding: 1rem;
+}
+
+.createButtonDefault {
+  background-color: #545f75;
+}
+
+.createButtonDefault:hover {
+  background-color: #7b8497;
+}
+
+.createButtonCombat {
+  background-color: #cd4a25;
+}
+
+.createButtonCombat:hover {
+  background-color: #f3734f;
+}
+
+.createButtonQuest {
+  background-color: #5c9d24;
+}
+
+.createButtonQuest:hover {
+  background-color: #78c534;
+}
+
 .checkedButton,
 .infoButton {
   color: lightgray;
@@ -319,6 +450,9 @@ input{
 .registerButton:focus,
 .createButtonCombat:focus,
 .createButtonDefault:focus,
-.createButtonQuest:focus {
+.createButtonQuest:focus,
+.ProjectModal button:focus,
+.ProjectView button:focus,
+.Monster button:focus {
   outline: none;
 }

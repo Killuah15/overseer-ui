@@ -1,24 +1,30 @@
-import React, { Component } from 'react';
-import { Button, Grid, Row, Col, Clearfix, Panel, Collapse, Well } from "react-bootstrap";
+import React, { Component } from "react";
+import { Grid, Row, Col, Clearfix, Panel, Well } from "react-bootstrap";
+import { Collapse } from "react-collapse";
 
-class Monster extends Component{
-
+class Monster extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      open: false
+      open: false,
+      name: props.name,
+      attack: props.attack
     };
   }
 
+  toggleCollapse = () => {
+    this.setState({
+      open: !this.state.open
+    });
+  };
 
   render() {
-
-  
-  
     return (
       <div className="Monster">
-        <div>ww</div>
+        <div>
+          <h5>{this.state.name}</h5>
+        </div>
         <Grid>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>
@@ -30,19 +36,19 @@ class Monster extends Component{
           </Row>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>
-              <code>{<div className="MonsterStats">ww</div>}</code>
+              <code>
+                {<div className="MonsterStats">{this.state.attack}</div>}
+              </code>
             </Col>
             <Col md={6} mdPull={6}>
               <code>{<div className="MonsterStats">ww</div>}</code>
             </Col>
           </Row>
         </Grid>
-  
+
         <div>
-          <Button onClick={() => this.setState({ open: !this.state.open })}>
-            click
-          </Button>
-          <Collapse in={this.state.open}>
+          <button onClick={this.toggleCollapse}>click</button>
+          <Collapse isOpened={this.state.open}>
             <div>
               <Well>
                 Anim pariatur cliche reprehenderit, enim eiusmod high life
@@ -53,13 +59,9 @@ class Monster extends Component{
             </div>
           </Collapse>
         </div>
-  
       </div>
     );
-  };
-
+  }
 }
-
-
 
 export default Monster;

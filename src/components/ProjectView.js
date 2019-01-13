@@ -1,135 +1,175 @@
-import React, { Component } from 'react';
-import { Button, Grid, Row, Col, Clearfix, Modal, Popover, Tooltip, OverlayTrigger } from "react-bootstrap";
-import { NavLink } from 'react-router-dom';
-import Project from './Project';
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import Project from "./Project";
+import Modal from "react-modal";
+import { Grid, Row, Col } from "react-bootstrap";
 
 class ProjectView extends React.Component {
-
   constructor(props, context) {
     super(props, context);
 
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-
     this.state = {
-      show: false,
+      selectedOption: "Symbaroum",
+      warningLabel: "",
+      isActive: false,
       projects: [
         {
-          name: "Sample Project"
+          name: "Sample Project",
+          type: "Symbaroum"
         }
-
-
       ]
+    };
+  }
+
+  componentWillMount() {
+    Modal.setAppElement("body");
+  }
+
+  toggleModal = () => {
+    this.setState({
+      isActive: !this.state.isActive,
+      warningLabel: ""
+    });
+  };
+
+  handleOptionChange = changeEvent => {
+    this.setState({
+      selectedOption: changeEvent.target.value
+    });
+  };
+
+  addProject(projects) {
+    if (this.refs.projectName.value !== "") {
+      this.setState(e => {
+        this.toggleModal();
+        projects.push({
+          name: this.refs.projectName.value,
+          type: this.state.selectedOption
+        });
+        return { projects };
+      });
+    } else {
+      this.setState({ warningLabel: "Please type in a Project Name" });
     }
   }
 
-  handleClose() {
-    this.setState({ show: false });
-  }
-
-  handleShow() {
-    this.setState({ show: true });
-  }
-
-
-  addProject(projects) {
-
-
-    this.setState((e) => {
-      projects.push(
-        {
-          name: "Test"
-        }
-      );
-      return { projects }
-    })
-
-
-  }
-
   render() {
-
-    const popover = (
-      <Popover id="modal-popover" title="popover">
-        very popover. such engagement
-      </Popover>
-    );
-    const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
-
-
     return (
-      <div className="ProjectView">
-      <div className="formHeader">Projects</div>
-        {this.state.projects.map((projects, i) => (
-        <Project
-          name={projects.name}
-        />
-      ))}
+      <div>
+        <div className="">
+          <NavLink to="/" className="">
+            <center>
+              <button className="navButton">Log Out</button>
+            </center>
+          </NavLink>
+        </div>
+        <div className="ProjectView">
+          <div className="formHeader">Projects</div>
+          {this.state.projects.map((projects, i) => (
+            <Project name={projects.name} type={projects.type} />
+          ))}
 
-        <center>
-          <button onClick={(e) => {
-            this.addProject(this.state.projects)
-          }}>+</button>
-        </center>
+          <center>
+            <button onClick={this.toggleModal}>+</button>
+            <Modal
+              className="ProjectModal"
+              overlayClassName="ProjectModalOverlay"
+              isOpen={this.state.isActive}
+              onRequestClose={this.toggleModal}
+            >
+              <button onClick={this.toggleModal}>x</button>
+              <h4>New Project</h4>
+              <input
+                type="text"
+                ref="projectName"
+                placeholder="type in a project name"
+              />
+              <center>
+                <label>{this.state.warningLabel}</label>
+              </center>
 
-<div>
-        <p>Click to get the full Modal experience!</p>
+              <form onSubmit={this.handleFormSubmit}>
+                <Grid>
+                  <Row className="">
+                    <Col md={4} mdPush={4}>
+                      <code>
+                        {
+                          <div className="radio">
+                            <label>
+                              <input
+                                className="inputRadio"
+                                type="radio"
+                                value="Symbaroum"
+                                checked={
+                                  this.state.selectedOption === "Symbaroum"
+                                }
+                                onChange={this.handleOptionChange}
+                              />
+                              Symbaroum
+                            </label>
+                          </div>
+                        }
+                      </code>
+                    </Col>
+                    <Col md={4} mdPull={4}>
+                      <code>
+                        {
+                          <div className="radio">
+                            <label>
+                              <input
+                                type="radio"
+                                value="Call of Cthulu"
+                                checked={
+                                  this.state.selectedOption === "Call of Cthulu"
+                                }
+                                onChange={this.handleOptionChange}
+                              />
+                              Call of Cthulu
+                            </label>
+                          </div>
+                        }
+                      </code>
+                    </Col>
+                    <Col md={4} mdPull={4}>
+                      <code>
+                        {
+                          <div className="radio">
+                            <label>
+                              <input
+                                type="radio"
+                                value="Das Schwarze Auge"
+                                checked={
+                                  this.state.selectedOption ===
+                                  "Das Schwarze Auge"
+                                }
+                                onChange={this.handleOptionChange}
+                              />
+                              Das Schwarze Auge
+                            </label>
+                          </div>
+                        }
+                      </code>
+                    </Col>
+                  </Row>
+                </Grid>
+              </form>
 
-        <Button bsStyle="primary" bsSize="large" onClick={this.handleShow}>
-          Launch demo modal
-        </Button>
-
-        <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <h4>Text in a modal</h4>
-            <p>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </p>
-
-            <h4>Popover in a modal</h4>
-            <p>
-              there is a{' '}
-              <OverlayTrigger overlay={popover}>
-                <a href="#popover">popover</a>
-              </OverlayTrigger>{' '}
-              here
-            </p>
-
-            <h4>Tooltips in a modal</h4>
-            <p>
-              there is a{' '}
-              <OverlayTrigger overlay={tooltip}>
-                <a href="#tooltip">tooltip</a>
-              </OverlayTrigger>{' '}
-              here
-            </p>
-
-            <hr />
-
-            <h4>Overflowing text to show scroll behavior</h4>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>        
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.handleClose}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+              <center>
+                <button
+                  id="createProject"
+                  onClick={e => {
+                    this.addProject(this.state.projects);
+                  }}
+                >
+                  create Project
+                </button>
+              </center>
+            </Modal>
+          </center>
+        </div>
       </div>
-
-      </div>
-
-      
     );
-  };
-
+  }
 }
-
-
 
 export default ProjectView;
