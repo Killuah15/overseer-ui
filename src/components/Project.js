@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const Project = props => {
   return (
-    <NavLink to="/Events" className="">
+    <NavLink to="/Events" style={{ textDecoration: "none" }}>
       <div className="Project">
         <Grid>
           <Row className="">

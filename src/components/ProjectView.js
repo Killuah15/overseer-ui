@@ -94,59 +94,66 @@ class ProjectView extends React.Component {
                     <Col md={4} mdPush={4}>
                       <code>
                         {
-                          <div className="radio">
-                            <label>
-                              <input
-                                className="inputRadio"
-                                type="radio"
-                                value="Symbaroum"
-                                checked={
-                                  this.state.selectedOption === "Symbaroum"
-                                }
-                                onChange={this.handleOptionChange}
-                              />
-                              Symbaroum
-                            </label>
-                          </div>
+                          <center>
+                            <div className="radio">
+                              <label>
+                                <input
+                                  className="inputRadio"
+                                  type="radio"
+                                  value="Symbaroum"
+                                  checked={
+                                    this.state.selectedOption === "Symbaroum"
+                                  }
+                                  onChange={this.handleOptionChange}
+                                />
+                                Symbaroum
+                              </label>
+                            </div>
+                          </center>
                         }
                       </code>
                     </Col>
                     <Col md={4} mdPull={4}>
                       <code>
                         {
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Call of Cthulu"
-                                checked={
-                                  this.state.selectedOption === "Call of Cthulu"
-                                }
-                                onChange={this.handleOptionChange}
-                              />
-                              Call of Cthulu
-                            </label>
-                          </div>
+                          <center>
+                            <div className="radio">
+                              <label>
+                                <input
+                                  type="radio"
+                                  value="Call of Cthulu"
+                                  checked={
+                                    this.state.selectedOption ===
+                                    "Call of Cthulu"
+                                  }
+                                  onChange={this.handleOptionChange}
+                                />
+                                Call of Cthulu
+                              </label>
+                            </div>
+                          </center>
                         }
                       </code>
                     </Col>
                     <Col md={4} mdPull={4}>
                       <code>
                         {
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Das Schwarze Auge"
-                                checked={
-                                  this.state.selectedOption ===
-                                  "Das Schwarze Auge"
-                                }
-                                onChange={this.handleOptionChange}
-                              />
-                              Das Schwarze Auge
-                            </label>
-                          </div>
+                          <center>
+                            <div className="radio">
+                              <label>
+                                <input
+                                  type="radio"
+                                  value="Das Schwarze Auge"
+                                  checked={
+                                    this.state.selectedOption ===
+                                    "Das Schwarze Auge"
+                                  }
+                                  onChange={this.handleOptionChange}
+                                />
+                                Das Schwarze Auge
+                              </label>
+                            </div>
+                          </center>
                         }
                       </code>
                     </Col>

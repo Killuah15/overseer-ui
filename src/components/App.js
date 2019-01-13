@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../public/styles/App.css";
 import { Button, Grid, Row, Col, Clearfix, Panel } from "react-bootstrap";
-import Card from "./Card";
+import EventCard from "./EventCard";
 import Trash from "./Trash";
 import Monster from "./Monster";
 import HTML5Backend from "react-dnd-html5-backend";
@@ -193,7 +193,7 @@ class App extends Component {
                       <center>
                         <div className="eventsArea" id="style-1">
                           {this.state.cards.map((card, i) => (
-                            <Card
+                            <EventCard
                               key={card.key}
                               index={i}
                               id={card.id}

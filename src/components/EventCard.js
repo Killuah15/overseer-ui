@@ -100,7 +100,7 @@ function eventClassName(eType, isActive) {
   }
 }
 
-class Card extends React.Component {
+class EventCard extends React.Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
@@ -133,7 +133,7 @@ class Card extends React.Component {
             style={{ opacity }}
             className={eventClassName(eventType, active)}
           >
-             {
+            {
               <button className="infoButton" onClick={showEvent}>
                 -
               </button>
@@ -159,4 +159,4 @@ export default flow(
   DropTarget("card", cardTarget, connect => ({
     connectDropTarget: connect.dropTarget()
   }))
-)(Card);
+)(EventCard);
