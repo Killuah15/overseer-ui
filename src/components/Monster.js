@@ -7,6 +7,8 @@ class Monster extends Component {
     super(props, context);
 
     this.state = {
+      deleteMonster: props.deleteMonster,
+      id: props.id,
       open: false,
       name: props.name,
       attack: props.attack
@@ -25,6 +27,7 @@ class Monster extends Component {
         <div>
           <h5>{this.state.name}</h5>
         </div>
+        <button onClick={this.state.deleteMonster}>delete</button>
         <Grid>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>

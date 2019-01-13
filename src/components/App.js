@@ -11,8 +11,6 @@ const update = require("immutability-helper");
 
 var newkey = 5;
 
-var newkey = 5;
-
 class App extends Component {
   state = {
     selectedOption: "Turtle",
@@ -119,14 +117,26 @@ class App extends Component {
   };
 
   addMonster(monsters) {
+    newkey++;
     this.setState(e => {
       monsters.push({
         name: this.state.selectedOption,
-        attack: "20"
+        attack: "20",
+        id: monsters.length,
+        key: newkey
       });
       return { monsters };
     });
   }
+
+  deleteMonster = id => {
+    this.setState(prevState => {
+      return {
+        monsters: prevState.monsters.filter(monster => monster.id !== id)
+      };
+    });
+    console.log("deleting id:" + id);
+  };
 
   render() {
     return (
@@ -146,9 +156,14 @@ class App extends Component {
                 {
                   <div className="eventInfo">
                     {this.state.textValue}
-                    <Monster name="Turtle" attack="12" willpower="1" />
                     {this.state.monsters.map((monsters, i) => (
-                      <Monster name={monsters.name} attack={monsters.attack} />
+                      <Monster
+                        key={monsters.key}
+                        name={monsters.name}
+                        attack={monsters.attack}
+                        deleteMonster={e => this.deleteMonster(i)}
+                        id={monsters.id}
+                      />
                     ))}
 
                     <select
