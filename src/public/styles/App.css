@@ -240,7 +240,7 @@ input {
   padding: 3rem 2rem 3rem 2rem;
   margin: auto;
   margin-top: 15rem;
-  width: 60%;
+  width: 50%;
   border-radius: 0.5rem;
   background-color: #545f75;
   -webkit-box-shadow: 0px 0px 60px -6px rgba(0, 0, 0, 0.75);
@@ -340,15 +340,25 @@ input[type="radio"] + span {
 /* ----     EVENTS     ----*/
 
 .eventInfo {
+  padding: 0.5rem 2rem 0.5rem 2rem;
   margin-top: 2rem;
   color: white;
+  background-color: #1e2127;
+  height: 90vh;
+}
+
+.eventInfoArea {
+  margin: auto;
+  overflow: auto;
+  height: 55vh;
 }
 
 .Events {
+  padding: 0.5rem 2rem 0.5rem 2rem;
   margin: auto;
   margin-top: 2rem;
-  margin-left: 3rem;
   color: white;
+  height: 90vh;
 }
 
 .eventsArea {

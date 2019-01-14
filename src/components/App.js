@@ -151,20 +151,23 @@ class App extends Component {
 
         <Grid>
           <Row className="show-grid">
-            <Col md={6} mdPush={6}>
+            <Col md={7} mdPush={7}>
               <code>
                 {
                   <div className="eventInfo">
-                    {this.state.textValue}
-                    {this.state.monsters.map((monsters, i) => (
-                      <Monster
-                        key={monsters.key}
-                        name={monsters.name}
-                        attack={monsters.attack}
-                        deleteMonster={e => this.deleteMonster(i)}
-                        id={monsters.id}
-                      />
-                    ))}
+                    <h1>{this.state.textValue}</h1>
+                    <br />
+                    <div className="eventInfoArea">
+                      {this.state.monsters.map((monsters, i) => (
+                        <Monster
+                          key={monsters.key}
+                          name={monsters.name}
+                          attack={monsters.attack}
+                          deleteMonster={e => this.deleteMonster(i)}
+                          id={monsters.id}
+                        />
+                      ))}
+                    </div>
 
                     <select
                       value={this.state.selectedOption}
@@ -183,7 +186,7 @@ class App extends Component {
                 }
               </code>
             </Col>
-            <Col md={6} mdPull={6}>
+            <Col md={5} mdPull={5}>
               <code>
                 {
                   <div>
