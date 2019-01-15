@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "apollo-boost": "^0.1.17",
+    "apollo-boost": "^0.1.23",
     "bootstrap": "^4.2.1",
     "graphql": "^14.0.2",
     "history": "^4.7.2",

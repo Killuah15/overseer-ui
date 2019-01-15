@@ -8,7 +8,8 @@ import _ from 'lodash';
 import { MagicSpinner } from 'react-spinners-kit';
 import ErrorMessage from '../apollo/ErrorMessage';
 import { PROJECTS } from '../apollo/templates/Queries';
-import { CREATEPROJECT } from '../apollo/templates/Mutations';
+import { CREATEPROJECT, LOGOUT } from '../apollo/templates/Mutations';
+import client from '../apollo/client';
 import Rules from '../apollo/Rules';
 
 class ProjectView extends React.Component {
@@ -69,11 +70,24 @@ class ProjectView extends React.Component {
     return (
       <div>
         <div className="">
-          <NavLink to="/" className="">
+          {/* <NavLink to="/" className=""> */}
+          <Mutation
+          mutation={LOGOUT}
+          onCompleted={() => {this.props.history.push('/')}}
+          >
+          {logout => (
+          <form onSubmit={ e => {
+            e.preventDefault()
+            client.clearStore()
+            logout()
+          }}>
             <center>
-              <button className="navButton">Log Out</button>
+              <button className="navButton" type="submit">Log Out</button>
             </center>
-          </NavLink>
+          </form>
+          )}
+          </Mutation>
+          {/* </NavLink> */}
         </div>
         <div className="ProjectView">
           <div className="formHeader">Projects</div>

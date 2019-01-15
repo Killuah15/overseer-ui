@@ -8,6 +8,14 @@ mutation login($data: LoginInput!){
 }
 `
 
+export const LOGOUT = gql `
+mutation logout{
+  logout {
+    username
+  }
+}
+`
+
 export const SIGNUP = gql`
 mutation signup($data: SignupInput!){
     signup(data: $data){
