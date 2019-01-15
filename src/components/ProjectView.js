@@ -113,13 +113,14 @@ class ProjectView extends React.Component {
               
 
               if(_.isEmpty(data) || data.projects.length <= 0) {
-                  return <center><Alert bsStyle="danger"><h4>No Projects</h4></Alert></center>
+                  return <center><Alert bsStyle="info"><h4>No Projects</h4></Alert></center>
                 } else {
                   return (
                   data.projects.map((project, i) => (
                       <Project name={project.title}
                       type={this.rules.getRuleTranslation(project.rulebook)}
-                      key={project.id} />
+                      key={project.id}
+                      projectID={project.id}/>
                     )
                   )
                   )

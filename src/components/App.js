@@ -32,7 +32,8 @@ class App extends Component {
         active: true,
         eventType: "Combat"
       }
-    ]
+    ],
+    projectID: this.props.location.state.projectID
   };
 
   deleteItem = id => {
@@ -139,6 +140,7 @@ class App extends Component {
   };
 
   render() {
+    /* console.log(`projectID: ${this.state.projectID}`); */
     return (
       <div className="App">
         <div className="">
