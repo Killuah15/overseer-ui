@@ -15,3 +15,14 @@ mutation signup($data: SignupInput!){
     }
 }
 `
+
+export const CREATEPROJECT = gql`
+mutation createProject($title: String!, $description: String, $rulebook: Rulebook!){
+  createProject(title: $title, description: $description, rulebook: $rulebook){
+    id
+    title
+    description
+    rulebook
+  }
+}
+`
