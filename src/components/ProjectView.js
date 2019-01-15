@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Project from "./Project";
 import Modal from "react-modal";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, Alert } from "react-bootstrap";
 import { Query, Mutation } from "react-apollo";
 import _ from 'lodash';
 import { MagicSpinner } from 'react-spinners-kit';
@@ -113,7 +113,7 @@ class ProjectView extends React.Component {
               
 
               if(_.isEmpty(data) || data.projects.length <= 0) {
-                  return <div></div>
+                  return <center><Alert bsStyle="danger"><h4>No Projects</h4></Alert></center>
                 } else {
                   return (
                   data.projects.map((project, i) => (
