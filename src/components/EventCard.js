@@ -74,21 +74,21 @@ const cardTarget = {
 
 function eventClassName(eType, isActive) {
   switch (eType) {
-    case "Default":
+    case "GENERIC":
       if (isActive) {
         return "eventDefault";
       } else {
         return "eventDefaultChecked";
       }
 
-    case "Combat":
+    case "COMBAT":
       if (isActive) {
         return "eventCombat";
       } else {
         return "eventCombatChecked";
       }
 
-    case "Quest":
+    case "QUEST":
       if (isActive) {
         return "eventQuest";
       } else {

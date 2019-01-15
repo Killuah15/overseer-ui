@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import "../public/styles/App.css";
-import { Button, Grid, Row, Col, Clearfix, Panel } from "react-bootstrap";
+import { Button, Grid, Row, Col, Clearfix, Panel, Alert } from "react-bootstrap";
 import EventCard from "./EventCard";
 import Trash from "./Trash";
 import Monster from "./Monster";
 import HTML5Backend from "react-dnd-html5-backend";
 import { NavLink } from "react-router-dom";
 import { DragDropContext } from "react-dnd";
+import { Query } from "react-apollo";
+import { MagicSpinner } from 'react-spinners-kit';
+import _ from 'lodash';
+import { EVENTS } from '../apollo/templates/Queries';
+import ErrorMessage from '../apollo/ErrorMessage';
+import client from "../apollo/client";
 const update = require("immutability-helper");
 
 var newkey = 5;
@@ -17,24 +23,29 @@ class App extends Component {
     textValue: "Test",
     monsterData: ["Turtle", "Fly", "Bird", "Wolf", "Lion"],
     monsters: [],
-    cards: [
-      {
-        id: 1,
-        text: "This is an Event",
-        key: 1,
-        active: true,
-        eventType: "Default"
-      },
-      {
-        id: 2,
-        text: "Wild Turtle Attacks!",
-        key: 2,
-        active: true,
-        eventType: "Combat"
-      }
-    ],
-    projectID: this.props.location.state.projectID
+    cards: [],
+    projectID: this.props.location.state.projectID,
+    currentEvent: null
   };
+
+  async componentDidMount(){
+
+    const cards = await client.query({
+      query: EVENTS,
+      variables: {
+        projectID: this.state.projectID
+      }
+    })
+
+    cards.data.events.forEach(element => {
+      element.active = true
+    });
+
+    this.setState({
+      cards: cards.data.events
+    })
+
+  }
 
   deleteItem = id => {
     this.setState(prevState => {
@@ -46,6 +57,7 @@ class App extends Component {
   };
 
   toggleChecked(index) {
+
     const card = this.state.cards[index];
 
     this.setState(e => {
@@ -56,9 +68,9 @@ class App extends Component {
         card.active = true;
         return { card };
       }
-    });
+    }); 
 
-    console.log(card.eventType);
+    console.log(card.eventRole);
   }
 
   showEvent(eType) {
@@ -140,7 +152,6 @@ class App extends Component {
   };
 
   render() {
-    /* console.log(`projectID: ${this.state.projectID}`); */
     return (
       <div className="App">
         <div className="">
@@ -195,25 +206,25 @@ class App extends Component {
                     <div className="Events">
                       <h1>Events</h1>
                       <br />
-                      <center>
-                        <div className="eventsArea" id="style-1">
-                          {this.state.cards.map((card, i) => (
-                            <EventCard
-                              key={card.key}
-                              index={i}
-                              id={card.id}
-                              text={card.text}
-                              item={card}
-                              active={card.active}
-                              eventType={card.eventType}
-                              moveCard={this.moveCard}
-                              toggleChecked={e => this.toggleChecked(i)}
-                              showEvent={e => this.showEvent(card.eventType)}
-                              handleDrop={id => this.deleteItem(id)}
-                            />
-                          ))}
-                        </div>
-                      </center>
+                        <center>
+                          <div className="eventsArea" id="style-1">
+                             {this.state.cards.map((event, i) => (
+                               <EventCard
+                                 key={event.id}
+                                 index={i}
+                                 id={event.id}
+                                 text={event.title}
+                                 item={event}
+                                 active={event.active}
+                                 eventType={event.eventRole}
+                                 moveCard={this.moveCard}
+                                 toggleChecked={e => this.toggleChecked(i)}
+                                 showEvent={e => this.showEvent(event.eventRole)}
+                                 handleDrop={id => this.deleteItem(id)}
+                               />
+                             ))}
+                           </div>
+                        </center>
 
                       <div className="Footer">
                         <Trash />

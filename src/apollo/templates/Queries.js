@@ -9,3 +9,14 @@ export const PROJECTS = gql`
         }
     }
 `
+
+export const EVENTS = gql`
+    query events($projectID: ID, $projectTitle: String){
+        events(projectID: $projectID, projectTitle: $projectTitle){
+            id
+            title
+            eventRole
+            index
+        }
+    }
+`
