@@ -4,7 +4,7 @@ import { NavLink, Link } from "react-router-dom";
 
 const Project = props => {
   return (
-    <Link to={{ pathname:'/Events', state: { projectID: props.projectID } }} style={{ textDecoration: "none" }}>
+    <Link to={{ pathname:'/Events', state: { projectID: props.projectID, rulebook: props.rulebook } }} style={{ textDecoration: "none" }}>
       <div className="Project">
         <Grid>
           <Row className="">

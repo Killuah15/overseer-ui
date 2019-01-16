@@ -120,7 +120,9 @@ class ProjectView extends React.Component {
                       <Project name={project.title}
                       type={this.rules.getRuleTranslation(project.rulebook)}
                       key={project.id}
-                      projectID={project.id}/>
+                      projectID={project.id}
+                      rulebook={project.rulebook}
+                      />
                     )
                   )
                   )

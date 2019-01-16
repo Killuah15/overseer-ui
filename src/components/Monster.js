@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Clearfix, Panel, Well } from "react-bootstrap";
 import { Collapse } from "react-collapse";
+import { Mutation } from "react-apollo";
+import { DELETECREATURE } from '../apollo/templates/Mutations';
+import { CREATURES } from "../apollo/templates/Queries";
 
 class Monster extends Component {
   constructor(props, context) {
@@ -27,7 +30,32 @@ class Monster extends Component {
         <div>
           <h5>{this.state.name}</h5>
         </div>
-        <button onClick={this.state.deleteMonster}>delete</button>
+        {/* <Mutation
+        mutation={DELETECREATURE}
+        update= {(cache, { data: { deleteCreature } }) => {
+          const { creatures } = cache.readQuery({ query: CREATURES, variables: { fromRulebook: this.props.rulebook } })
+          cache.writeQuery({
+            query: CREATURES,
+            variables: {
+               fromRulebook: this.props.rulebook
+            },
+            data: {
+              creatures: creatures.filter(creature => creature.id !== deleteCreature.id)
+            }
+          })
+        }}
+        >
+        { deleteCreature => (
+          <form
+          onSubmit={e => {
+            e.preventDefault()
+            deleteCreature({ variables: { id: this.props.id }})
+          }}
+          >  */}     
+          <button /* type='submit' */ onClick={this.state.deleteMonster}>delete</button>
+          {/* </form>
+        )}
+        </Mutation> */}
         <Grid>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>

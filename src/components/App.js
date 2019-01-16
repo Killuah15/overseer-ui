@@ -7,10 +7,11 @@ import Monster from "./Monster";
 import HTML5Backend from "react-dnd-html5-backend";
 import { NavLink } from "react-router-dom";
 import { DragDropContext } from "react-dnd";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { MagicSpinner } from 'react-spinners-kit';
 import _ from 'lodash';
-import { EVENTS } from '../apollo/templates/Queries';
+import { EVENTS, CREATURES } from '../apollo/templates/Queries';
+import { CREATECREATURE, DELETECREATURE } from '../apollo/templates/Mutations';
 import ErrorMessage from '../apollo/ErrorMessage';
 import client from "../apollo/client";
 const update = require("immutability-helper");
@@ -19,12 +20,13 @@ var newkey = 5;
 
 class App extends Component {
   state = {
-    selectedOption: "Turtle",
-    textValue: "Test",
-    monsterData: ["Turtle", "Fly", "Bird", "Wolf", "Lion"],
+    selectedOption: '',
+    textValue: '',
+    monsterData: [],
     monsters: [],
     cards: [],
     projectID: this.props.location.state.projectID,
+    rulebook: this.props.location.state.rulebook,
     currentEvent: null
   };
 
@@ -37,14 +39,24 @@ class App extends Component {
       }
     })
 
+    const monsters = await client.query({
+      query: CREATURES,
+      variables: {
+        fromRulebook: this.state.rulebook
+      }
+    })
+
     cards.data.events.forEach(element => {
       element.active = true
     });
 
     this.setState({
-      cards: cards.data.events
+      cards: cards.data.events,
+      monsterData: monsters.data.creatures,
+      selectedOption: monsters.data.creatures[0].name,
+      currentEvent: cards.data.events[0] ? cards.data.events[0].id : null,
+      textValue: cards.data.events[0] ? cards.data.events[0].title : '',
     })
-
   }
 
   deleteItem = id => {
@@ -73,12 +85,22 @@ class App extends Component {
     console.log(card.eventRole);
   }
 
-  showEvent(eType) {
+  async showEvent(event) {
+
+    const monstersOfEvent = await client.query({
+      query: CREATURES,
+      variables: {
+        eventID: event.id
+      }
+    })
+
     this.setState({
-      textValue: eType
+      textValue: event.title,
+      currentEvent: event.id,
+      monsters: monstersOfEvent.data.creatures
     });
 
-    console.log(eType);
+    console.log(event.eventRole);
   }
 
   moveCard = (dragIndex, hoverIndex) => {
@@ -94,7 +116,7 @@ class App extends Component {
     );
   };
 
-  addCard(cards, eType) {
+  async addCard(cards, eType) {
     console.log("new Card");
     console.log(cards);
     newkey++;
@@ -118,8 +140,9 @@ class App extends Component {
     let selection = [];
 
     for (let i = 0; i < this.state.monsterData.length; i++) {
-      selection.push(<option>{this.state.monsterData[i]}</option>);
+      selection.push(<option>{this.state.monsterData[i].name}</option>);
     }
+
     return selection;
   }
 
@@ -135,7 +158,7 @@ class App extends Component {
       monsters.push({
         name: this.state.selectedOption,
         attack: "20",
-        id: monsters.length,
+        id: monsters.id,
         key: newkey
       });
       return { monsters };
@@ -143,12 +166,39 @@ class App extends Component {
   }
 
   deleteMonster = id => {
-    this.setState(prevState => {
+
+    client.mutate({
+      mutation: DELETECREATURE,
+      variables: {
+        id
+      },
+      update: (cache, { data: { deleteCreature }}) => {
+        
+        const { creatures } = cache.readQuery({
+          query: CREATURES,
+          variables: {
+            eventID: this.state.currentEvent
+          }
+        })
+
+        cache.writeQuery({
+          query: CREATURES,
+          variables: {
+            eventID: this.state.currentEvent
+          },
+          data: {
+            creatures: creatures.filter(creature => creature.id !== deleteCreature.id)
+          }
+        })
+      }
+    })
+
+    /* this.setState(prevState => {
       return {
         monsters: prevState.monsters.filter(monster => monster.id !== id)
       };
     });
-    console.log("deleting id:" + id);
+    console.log("deleting id:" + id); */
   };
 
   render() {
@@ -170,31 +220,133 @@ class App extends Component {
                   <div className="eventInfo">
                     <h1>{this.state.textValue}</h1>
                     <br />
-                    <div className="eventInfoArea">
-                      {this.state.monsters.map((monsters, i) => (
-                        <Monster
-                          key={monsters.key}
-                          name={monsters.name}
-                          attack={monsters.attack}
-                          deleteMonster={e => this.deleteMonster(i)}
-                          id={monsters.id}
-                        />
-                      ))}
-                    </div>
+                    <Query
+                    query={CREATURES}
+                    variables={{
+                      eventID: this.state.currentEvent
+                    }}>
+                    {({ loading, error, data }) => {
 
+                      if(loading){
+                        return (
+                      <center>
+                        <MagicSpinner size={50} color="#6cd404" loading={loading} />
+                      </center>
+                        )
+                      } 
+        
+                      if(error){
+                        return (
+                          <center>
+                            <ErrorMessage error={error} message={"Unable to get Projects"} />
+                          </center>
+                        )
+                      }
+
+                      if(_.isEmpty(data) || data.creatures.length <= 0) {
+                        return <center><Alert bsStyle="info"><h4>No Creatures in this Event</h4></Alert></center>
+                      } else {
+                        return (
+                          <div className="eventInfoArea">
+                          {data.creatures.map((monster, i) => (
+                            <Monster
+                              key={monster.id}
+                              name={monster.name}
+                              attack={monster.Conditions.physical.fitness.toughness}
+                              deleteMonster={e => this.deleteMonster(monster.id)}
+                              id={monster.id}
+                              rulebook={this.state.rulebook}
+                            />
+                          ))}
+                        </div>
+                        )
+                      }
+
+                        
+                      }}
+                    </Query>
                     <select
                       value={this.state.selectedOption}
                       onChange={this.handleOptionChange}
                     >
                       {this.fillMonsterList()}
                     </select>
-                    <button
-                      onClick={e => {
-                        this.addMonster(this.state.monsters);
-                      }}
+                    <Mutation
+                    mutation={CREATECREATURE}
+                    update={(cache, { data : { createCreature }}) => {
+
+                      const { creatures } = cache.readQuery({
+                        query: CREATURES,
+                        variables: {
+                          eventID: this.state.currentEvent
+                        }
+                      })
+
+                      cache.writeQuery({
+                        query: CREATURES,
+                        variables: {
+                          eventID: this.state.currentEvent
+                        },
+                        data: {
+                          creatures: creatures.concat(createCreature)
+                        }
+                      })
+
+                    }}
                     >
-                      add
-                    </button>
+                    {createCreature => (
+                      <form
+                      onSubmit={e => {
+                        e.preventDefault()
+                        const monster = this.state.monsterData.filter(monster => monster.name === this.state.selectedOption)[0]
+
+                        createCreature({
+                          variables: {
+                            data: {
+                              event: this.state.currentEvent,
+                              name: monster.name,
+                              race: monster.race,
+                              shadow: monster.shadow,
+                              rulebook: this.state.rulebook,
+                              Conditions: {
+                                physical: {
+                                  fitness: {
+                                    painThreshold: monster.Conditions.physical.fitness.painThreshold,
+                                    toughness: monster.Conditions.physical.fitness.toughness
+                                  }
+                                },
+                                spiritual: {
+                                  corruption: {
+                                    current: monster.Conditions.spiritual.corruption.current,
+                                    threshold: monster.Conditions.spiritual.corruption.threshold,
+                                    permanent: monster.Conditions.spiritual.corruption.permanent
+                                  }
+                                }
+                              },
+                              attributes: {
+                                accurate: monster.attributes.accurate,
+                                cunning: monster.attributes.cunning,
+                                discreet: monster.attributes.discreet,
+                                persuasive: monster.attributes.persuasive,
+                                quick: monster.attributes.quick,
+                                resolute: monster.attributes.resolute,
+                                strong: monster.attributes.strong,
+                                vigilant: monster.attributes.vigilant,
+                                defense: monster.attributes.defense
+                              }
+                            }
+                          }
+                        })
+                      }}
+                      >
+                        <button
+                        type='submit'
+                        >
+                          add
+                        </button>
+                      </form>
+                    )}
+                    </Mutation>
                   </div>
                 }
               </code>
@@ -219,7 +371,7 @@ class App extends Component {
                                  eventType={event.eventRole}
                                  moveCard={this.moveCard}
                                  toggleChecked={e => this.toggleChecked(i)}
-                                 showEvent={e => this.showEvent(event.eventRole)}
+                                 showEvent={e => this.showEvent(event)}
                                  handleDrop={id => this.deleteItem(id)}
                                />
                              ))}
