@@ -103,7 +103,7 @@ class App extends Component {
     console.log(trashVis);
   }
 
-  showEvent(eType) {
+  showEvent(event) {
     this.setState({
       textValue: event.title,
       currentEvent: event.id,
