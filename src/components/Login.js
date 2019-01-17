@@ -9,13 +9,6 @@ import eye_logo from "../public/img/eye_logo.png";
 
 let mailInput = true;
 
-/* const checkLogin = () =>{
-  if(!mailInput){
-    return "/"
-  }else{
-    return "/Projects"
-  }
-} */
 document.body.style.backgroundColor = "green";
 
 class Login extends React.Component {

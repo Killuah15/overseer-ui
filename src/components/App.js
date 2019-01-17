@@ -202,13 +202,6 @@ class App extends Component {
         })
       }
     })
-
-    /* this.setState(prevState => {
-      return {
-        monsters: prevState.monsters.filter(monster => monster.id !== id)
-      };
-    });
-    console.log("deleting id:" + id); */
   };
 
   render() {
@@ -274,10 +267,11 @@ class App extends Component {
                       }
                       }}
                     </Query>
+                    <div className="addMonsterMenu">
                     <select
                       value={this.state.selectedOption}
                       onChange={this.handleOptionChange}
-                        className="addMonsterMenuOption"
+                      className="addMonsterMenuOption"
                     >
                       {this.fillMonsterList()}
                     </select>
@@ -357,6 +351,7 @@ class App extends Component {
                       </form>
                     )}
                     </Mutation>
+                    </div>
                   </div>
                 }
               </code>
@@ -372,19 +367,18 @@ class App extends Component {
                           <div className="eventsArea" id="style-1">
                              {this.state.cards.map((event, i) => (
                                <EventCard
-                                 key={event.id}
-                                 index={i}
-                                 id={event.id}
-                                 text={event.title}
-                                 item={event}
-                                 active={event.active}
-                                 eventType={event.eventRole}
-                                 moveCard={this.moveCard}
-                                 toggleChecked={e => this.toggleChecked(i)}
-                                 showEvent={e => this.showEvent(event)}
-                                 handleDrop={id => this.deleteItem(id)}
-                              toggleTrashVisible={e =>
-                                this.toggleTrashVisible(this.state.trashVis)
+                                key={event.id}
+                                index={i}
+                                id={event.id}
+                                text={event.title}
+                                item={event}
+                                active={event.active}
+                                eventType={event.eventRole}
+                                moveCard={this.moveCard}
+                                toggleChecked={e => this.toggleChecked(i)}
+                                showEvent={e => this.showEvent(event)}
+                                handleDrop={id => this.deleteItem(id)}
+                                toggleTrashVisible={e => this.toggleTrashVisible(this.state.trashVis)}
                             />
                           ))}
                         </div>
