@@ -13,6 +13,7 @@ var newkey = 5;
 
 class App extends Component {
   state = {
+    trashVis: true,
     selectedOption: "Turtle",
     textValue: "Test",
     monsterData: ["Turtle", "Fly", "Bird", "Wolf", "Lion"],
@@ -58,6 +59,13 @@ class App extends Component {
     });
 
     console.log(card.eventType);
+  }
+
+  toggleTrashVisible(vis) {
+    this.setState({
+      trashVis: !vis
+    });
+    console.log(trashVis);
   }
 
   showEvent(eType) {
@@ -155,9 +163,9 @@ class App extends Component {
               <code>
                 {
                   <div className="eventInfo">
-                    <h1>{this.state.textValue}</h1>
+                    <h4>{this.state.textValue}</h4>
                     <br />
-                    <div className="eventInfoArea">
+                    <div className="eventInfoArea" id="style-1">
                       {this.state.monsters.map((monsters, i) => (
                         <Monster
                           key={monsters.key}
@@ -169,19 +177,22 @@ class App extends Component {
                       ))}
                     </div>
 
-                    <select
-                      value={this.state.selectedOption}
-                      onChange={this.handleOptionChange}
-                    >
-                      {this.fillMonsterList()}
-                    </select>
-                    <button
-                      onClick={e => {
-                        this.addMonster(this.state.monsters);
-                      }}
-                    >
-                      add
-                    </button>
+                    <div className="addMonsterMenu">
+                      <select
+                        value={this.state.selectedOption}
+                        onChange={this.handleOptionChange}
+                        className="addMonsterMenuOption"
+                      >
+                        {this.fillMonsterList()}
+                      </select>
+                      <button
+                        onClick={e => {
+                          this.addMonster(this.state.monsters);
+                        }}
+                      >
+                        add
+                      </button>
+                    </div>
                   </div>
                 }
               </code>
@@ -208,44 +219,49 @@ class App extends Component {
                               toggleChecked={e => this.toggleChecked(i)}
                               showEvent={e => this.showEvent(card.eventType)}
                               handleDrop={id => this.deleteItem(id)}
+                              toggleTrashVisible={e =>
+                                this.toggleTrashVisible(this.state.trashVis)
+                              }
                             />
                           ))}
                         </div>
                       </center>
 
                       <div className="Footer">
-                        <Trash />
+                        <Trash visible={this.state.trashVis} />
 
                         <input
                           ref="eventText"
                           type="text"
                           placeholder="type in new Event"
                         />
-                        <br />
-                        <button
-                          className="createButtonDefault"
-                          onClick={e => {
-                            this.addCard(this.state.cards, "Default");
-                          }}
-                        >
-                          Default
-                        </button>
-                        <button
-                          className="createButtonCombat"
-                          onClick={e => {
-                            this.addCard(this.state.cards, "Combat");
-                          }}
-                        >
-                          Combat
-                        </button>
-                        <button
-                          className="createButtonQuest"
-                          onClick={e => {
-                            this.addCard(this.state.cards, "Quest");
-                          }}
-                        >
-                          Quest
-                        </button>
+
+                        <div className="createButtonWrapper">
+                          <button
+                            className="createButtonDefault"
+                            onClick={e => {
+                              this.addCard(this.state.cards, "Default");
+                            }}
+                          >
+                            Default
+                          </button>
+                          <button
+                            className="createButtonCombat"
+                            onClick={e => {
+                              this.addCard(this.state.cards, "Combat");
+                            }}
+                          >
+                            Combat
+                          </button>
+                          <button
+                            className="createButtonQuest"
+                            onClick={e => {
+                              this.addCard(this.state.cards, "Quest");
+                            }}
+                          >
+                            Quest
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

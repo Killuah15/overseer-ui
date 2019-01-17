@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { DropTarget } from "react-dnd";
-import { trash_can } from "./img/trash_can.png";
 
 const dropSource = {
   drop(props, monitor) {
@@ -18,16 +17,27 @@ function collect(connect, monitor) {
 }
 
 class Trash extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      trashVis: props.visible
+    };
+  }
+
   render() {
     const { connectDropTarget, hovered } = this.props;
     const backgroundColor = hovered ? "#FC7468" : "#FC4636";
     return connectDropTarget(
-      <div className="Trash" style={{ backgroundColor }}>
+      <div
+        className={this.state.trashVis ? "Trash" : "TrashHide"}
+        style={{ backgroundColor }}
+      >
         <center>
           <img
             className="trashIcon"
             draggable="false"
-            src={require("./img/trash_can.png")}
+            src={require("../public/img/trash_can.png")}
           />
         </center>
       </div>

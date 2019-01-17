@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Clearfix, Panel, Well } from "react-bootstrap";
 import { Collapse } from "react-collapse";
+import Popover from "react-simple-popover";
 
 class Monster extends Component {
   constructor(props, context) {
@@ -10,24 +11,46 @@ class Monster extends Component {
       deleteMonster: props.deleteMonster,
       id: props.id,
       open: false,
+      openAbilities: false,
+      openDescription: false,
       name: props.name,
       attack: props.attack
     };
   }
 
-  toggleCollapse = () => {
+  toggleAbilities = () => {
     this.setState({
-      open: !this.state.open
+      openAbilities: !this.state.openAbilities
     });
   };
+
+  toggleDescription = () => {
+    this.setState({
+      openDescription: !this.state.openDescription
+    });
+  };
+
+  handleClick(e) {
+    this.setState({ open: !this.state.open });
+  }
+
+  handleClose(e) {
+    this.setState({ open: false });
+  }
 
   render() {
     return (
       <div className="Monster">
         <div>
-          <h5>{this.state.name}</h5>
+          <button id="monsterDelete" onClick={this.state.deleteMonster}>
+            x
+          </button>
+          <br />
+          <h5>
+            <center>{this.state.name}</center>
+          </h5>
         </div>
-        <button onClick={this.state.deleteMonster}>delete</button>
+
         <Grid>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>
@@ -50,8 +73,49 @@ class Monster extends Component {
         </Grid>
 
         <div>
-          <button onClick={this.toggleCollapse}>click</button>
-          <Collapse isOpened={this.state.open}>
+          <button onClick={this.toggleAbilities}>Abilities</button>
+          <Collapse isOpened={this.state.openAbilities}>
+            <div>
+              <Well>
+                <Grid>
+                  <Row className="MonsterStats">
+                    <Col md={12} mdPush={12}>
+                      <code>
+                        {
+                          <div>
+                            <div
+                              href="#"
+                              ref="bla"
+                              onClick={this.handleClick.bind(this)}
+                              className="MonsterAbility"
+                            >
+                              Walking
+                            </div>
+
+                            <Popover
+                              placement="right"
+                              container={this.Col}
+                              target={this.refs.bla}
+                              show={this.state.open}
+                              onHide={this.handleClose.bind(this)}
+                              hideWithOutsideClick="true"
+                            >
+                              <p>This is popover</p>
+                            </Popover>
+                          </div>
+                        }
+                      </code>
+                    </Col>
+                  </Row>
+                </Grid>
+              </Well>
+            </div>
+          </Collapse>
+        </div>
+
+        <div>
+          <button onClick={this.toggleDescription}>Description</button>
+          <Collapse isOpened={this.state.openDescription}>
             <div>
               <Well>
                 Anim pariatur cliche reprehenderit, enim eiusmod high life

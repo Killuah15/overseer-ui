@@ -55,8 +55,9 @@ class ProjectView extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="">
+      <div className="">
+        <div className="projectBackground" />
+        <div className="projectContent">
           <NavLink to="/" className="">
             <center>
               <button className="navButton">Log Out</button>

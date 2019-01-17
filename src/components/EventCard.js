@@ -120,6 +120,7 @@ class EventCard extends React.Component {
       toggleChecked,
       showEvent,
       active,
+      toggleTrashVisible,
       eventType
     } = this.props;
     const opacity = isDragging ? 0 : 1;
