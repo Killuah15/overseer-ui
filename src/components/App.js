@@ -11,7 +11,7 @@ import { Query, Mutation } from "react-apollo";
 import { MagicSpinner } from 'react-spinners-kit';
 import _ from 'lodash';
 import { EVENTS, CREATURES } from '../apollo/templates/Queries';
-import { CREATECREATURE, DELETECREATURE } from '../apollo/templates/Mutations';
+import { CREATECREATURE, DELETECREATURE, CREATEEVENT } from '../apollo/templates/Mutations';
 import ErrorMessage from '../apollo/ErrorMessage';
 import client from "../apollo/client";
 const update = require("immutability-helper");
@@ -127,20 +127,54 @@ class App extends Component {
   async addCard(cards, eType) {
     console.log("new Card");
     console.log(cards);
-    newkey++;
 
     if (this.refs.eventText.value !== "") {
+
+      const nextCard = await client.mutate({
+        mutation: CREATEEVENT,
+        variables: {
+          data: {
+            title: this.refs.eventText.value,
+            description: null,
+            eventRole: eType,
+            index: this.state.cards.length,
+            project: this.state.projectID
+          }
+        },
+        update: (cache, { data: { createEvent }}) => {
+        
+          const { events } = cache.readQuery({
+            query: EVENTS,
+            variables: {
+              projectID: this.state.projectID
+            }
+          })
+  
+          cache.writeQuery({
+            query: EVENTS,
+            variables: {
+              projectID: this.state.projectID
+            },
+            data: {
+              events: events.filter(event => event.id !== createEvent.id)
+            }
+          })
+        }
+      })
+
       this.setState(e => {
         cards.push({
-          id: cards.length + 2,
-          text: this.refs.eventText.value,
-          key: newkey,
+          id: nextCard.id,
+          text: nextCard.title,
+          key: nextCard.id,
           active: true,
-          eventType: eType
+          eventType: nextCard.eventRole
         });
         this.refs.eventText.value = "";
         return { cards };
       });
+
+      /* console.log(cards); */
     }
   }
 
@@ -381,7 +415,6 @@ class App extends Component {
                           ))}
                         </div>
                       </center>
-
                       <div className="Footer">
                         <Trash visible={this.state.trashVis} />
 
@@ -395,7 +428,7 @@ class App extends Component {
                           <button
                             className="createButtonDefault"
                             onClick={e => {
-                              this.addCard(this.state.cards, "Default");
+                              this.addCard(this.state.cards, "GENERIC");
                             }}
                           >
                             Default
@@ -403,7 +436,7 @@ class App extends Component {
                           <button
                             className="createButtonCombat"
                             onClick={e => {
-                              this.addCard(this.state.cards, "Combat");
+                              this.addCard(this.state.cards, "COMBAT");
                             }}
                           >
                             Combat
@@ -411,7 +444,7 @@ class App extends Component {
                           <button
                             className="createButtonQuest"
                             onClick={e => {
-                              this.addCard(this.state.cards, "Quest");
+                              this.addCard(this.state.cards, "QUEST");
                             }}
                           >
                             Quest

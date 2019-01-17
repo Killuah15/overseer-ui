@@ -90,3 +90,15 @@ export const DELETECREATURE = gql`
     }
   }
 `
+
+export const CREATEEVENT = gql`
+  mutation createEvent($data: EventInput!){
+    createEvent(data: $data){
+      id
+      title
+      description
+      eventRole
+      index
+    }
+  }
+`
