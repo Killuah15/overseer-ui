@@ -50,7 +50,6 @@ class Monster extends Component {
             <center>{this.state.name}</center>
           </h5>
         </div>
-
         <Grid>
           <Row className="MonsterStats">
             <Col md={6} mdPush={6}>
