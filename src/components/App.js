@@ -94,6 +94,7 @@ class App extends Component {
         eventID: event.id
       }
     })
+  }
 
   toggleTrashVisible(vis) {
     this.setState({
@@ -235,7 +236,7 @@ class App extends Component {
                       eventID: this.state.currentEvent
                     }}>
                     {({ loading, error, data }) => {
-                    <div className="eventInfoArea" id="style-1">
+                    
 
                       if(loading){
                         return (
@@ -257,6 +258,7 @@ class App extends Component {
                         return <center><Alert bsStyle="info"><h4>No Creatures in this Event</h4></Alert></center>
                       } else {
                         return (
+                        <div className="eventInfoArea" id="style-1">
                           {data.creatures.map((monster, i) => (
                             <Monster
                               key={monster.id}
