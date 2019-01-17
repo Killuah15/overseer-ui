@@ -56,100 +56,117 @@ class Login extends React.Component {
               }}
             >
               <div className="loginWrapper">
-                <Grid className="Login">
-                  <Row className="loginInner">
-                    <Col md={12} mdPush={12}>
-                      <code>
-                        {
-                          <div>
-                            <div className="Logo">
-                              <center>
-                                <img draggable="false" src={eye_logo} />
-                              </center>
-                            </div>
-                            <div className="formHeader" id="mainHeader">
-                              Overseer
-                            </div>
-                          </div>
-                        }
-                      </code>
-                      <center>
-                        <MagicSpinner
-                          size={50}
-                          color="#6cd404"
-                          loading={loading}
-                        />
-                        <ErrorMessage
-                          error={error}
-                          message={"Unable to Login"}
-                        />
-                      </center>
-                    </Col>
-                  </Row>
-                  <Row className="loginInner">
-                    <Col md={6} mdPush={6}>
-                      <code>
-                        {
-                          <div className="loginInputLabel">
+                <Grid>
+                  <Row>
+                    <Col xs={12} md={3} />
+                    <Col xs={12} md={6}>
+                      {" "}
+                      <Grid className="Login">
+                        <Row className="loginInner">
+                          <Col xs={12} md={12}>
+                            <code>
+                              {
+                                <div>
+                                  <div className="Logo">
+                                    <center>
+                                      <img draggable="false" src={eye_logo} />
+                                    </center>
+                                  </div>
+                                  <div className="formHeader" id="mainHeader">
+                                    Overseer
+                                  </div>
+                                </div>
+                              }
+                            </code>
                             <center>
-                              <input
-                                type="text"
-                                placeholder="e-Mail"
-                                value={this.state.email}
-                                onChange={e => {
-                                  this.handleChange(e);
-                                }}
+                              <MagicSpinner
+                                size={50}
+                                color="#6cd404"
+                                loading={loading}
                               />
-                            </center>{" "}
-                          </div>
-                        }
-                      </code>
-                    </Col>
-                    <Col md={6} mdPull={6}>
-                      <code>
-                        {
-                          <div className="loginInputLabel">
-                            {" "}
-                            <center>
-                              <input
-                                type="password"
-                                placeholder="password"
-                                value={this.state.pw}
-                                onChange={e => {
-                                  this.handleChange(e);
-                                }}
+                              <ErrorMessage
+                                error={error}
+                                message={"Unable to Login"}
                               />
                             </center>
-                          </div>
-                        }
-                      </code>
-                    </Col>
-                  </Row>
-                  <center>
-                    <div className="buttonWrapper">
-                      {/* <NavLink to={checkLogin()} className="" onClick={(e) => {
+                          </Col>
+                        </Row>
+                        <Row className="loginInner">
+                          <Col xs={12} md={6}>
+                            <code>
+                              {
+                                <div>
+                                  <div className="loginInputLabel">
+                                    <center>
+                                      <input
+                                        type="text"
+                                        placeholder="e-Mail"
+                                        value={this.state.email}
+                                        onChange={e => {
+                                          this.handleChange(e);
+                                        }}
+                                      />
+                                    </center>
+                                  </div>
+                                </div>
+                              }
+                            </code>
+                          </Col>
+                          <Col xs={12} md={6}>
+                            <code>
+                              {
+                                <div className="loginInputLabel">
+                                  {" "}
+                                  <center>
+                                    <input
+                                      type="password"
+                                      placeholder="password"
+                                      value={this.state.pw}
+                                      onChange={e => {
+                                        this.handleChange(e);
+                                      }}
+                                    />
+                                  </center>
+                                </div>
+                              }
+                            </code>
+                          </Col>
+                        </Row>
+                        <Row className="loginInner">
+                          <Col xs={12} md={12}>
+                            <center>
+                              <div className="buttonWrapper">
+                                {/* <NavLink to={checkLogin()} className="" onClick={(e) => {
                 console.log('Login')
               }}></NavLink> */}
-                      <center>
-                        <button type="submit" className="loginButton">
-                          Login
-                        </button>
-                      </center>
-                    </div>
-                    <div className="buttonWrapper">
-                      <NavLink
-                        to="/Register"
-                        className=""
-                        onClick={e => {
-                          console.log("Login");
-                        }}
-                      >
-                        <center>
-                          <button className="registerButton">sign up</button>
-                        </center>
-                      </NavLink>
-                    </div>
-                  </center>
+                                <center>
+                                  <button type="submit" className="loginButton">
+                                    Login
+                                  </button>
+                                </center>
+                              </div>
+                              <div className="buttonWrapper">
+                                <NavLink
+                                  to="/Register"
+                                  className=""
+                                  onClick={e => {
+                                    console.log("Login");
+                                  }}
+                                >
+                                  <center>
+                                    <button className="registerButton">
+                                      sign up
+                                    </button>
+                                  </center>
+                                </NavLink>
+                              </div>
+                            </center>
+                          </Col>
+                        </Row>
+                      </Grid>
+                    </Col>
+                    <Col xs={12} md={3} />
+                  </Row>
                 </Grid>
               </div>
             </form>
