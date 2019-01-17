@@ -94,16 +94,7 @@ class App extends Component {
         eventID: event.id
       }
     })
-  }
 
-  toggleTrashVisible(vis) {
-    this.setState({
-      trashVis: !vis
-    });
-    console.log(trashVis);
-  }
-
-  showEvent(event) {
     this.setState({
       textValue: event.title,
       currentEvent: event.id,
@@ -111,6 +102,13 @@ class App extends Component {
     });
 
     console.log(event.eventRole);
+  }
+
+  toggleTrashVisible(vis) {
+    this.setState({
+      trashVis: !vis
+    });
+    console.log(trashVis);
   }
 
   moveCard = (dragIndex, hoverIndex) => {
