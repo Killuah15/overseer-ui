@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Button, Grid, Row, Col, Clearfix } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const Project = props => {
   return (
-    <NavLink to="/Events" style={{ textDecoration: "none" }}>
+    <Link to={{ pathname:'/Events', state: { projectID: props.projectID, rulebook: props.rulebook } }} style={{ textDecoration: "none" }}>
       <div className="Project">
         <Grid>
           <Row className="">
@@ -33,7 +33,7 @@ const Project = props => {
           </Row>
         </Grid>
       </div>
-    </NavLink>
+    </Link>
   );
 };
 

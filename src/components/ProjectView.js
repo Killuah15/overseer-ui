@@ -2,11 +2,21 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Project from "./Project";
 import Modal from "react-modal";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, Alert } from "react-bootstrap";
+import { Query, Mutation } from "react-apollo";
+import _ from 'lodash';
+import { MagicSpinner } from 'react-spinners-kit';
+import ErrorMessage from '../apollo/ErrorMessage';
+import { PROJECTS } from '../apollo/templates/Queries';
+import { CREATEPROJECT, LOGOUT } from '../apollo/templates/Mutations';
+import client from '../apollo/client';
+import Rules from '../apollo/Rules';
 
 class ProjectView extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    this.rules = new Rules()
 
     this.state = {
       selectedOption: "Symbaroum",
@@ -38,16 +48,19 @@ class ProjectView extends React.Component {
     });
   };
 
-  addProject(projects) {
+  addProject(createProjectMutation) {
     if (this.refs.projectName.value !== "") {
-      this.setState(e => {
+      /* this.setState(e => {
         this.toggleModal();
         projects.push({
           name: this.refs.projectName.value,
           type: this.state.selectedOption
         });
         return { projects };
-      });
+      }); */
+
+      this.toggleModal()
+      createProjectMutation({ variables: { title: this.refs.projectName.value, rulebook: this.state.selectedOption }})
     } else {
       this.setState({ warningLabel: "Please type in a Project Name" });
     }
@@ -58,17 +71,65 @@ class ProjectView extends React.Component {
       <div className="">
         <div className="projectBackground" />
         <div className="projectContent">
-          <NavLink to="/" className="">
+          {/* <NavLink to="/" className=""> */}
+          <Mutation
+          mutation={LOGOUT}
+          onCompleted={() => {this.props.history.push('/')}}
+          >
+          {logout => (
+          <form onSubmit={ e => {
+            e.preventDefault()
+            client.clearStore()
+            logout()
+          }}>
             <center>
-              <button className="navButton">Log Out</button>
+              <button className="navButton" type="submit">Log Out</button>
             </center>
-          </NavLink>
+          </form>
+          )}
+          </Mutation>
+          {/* </NavLink> */}
         </div>
         <div className="ProjectView">
           <div className="formHeader">Projects</div>
-          {this.state.projects.map((projects, i) => (
-            <Project name={projects.name} type={projects.type} />
-          ))}
+
+          <Query query={PROJECTS}>
+            {({ loading, error, data}) => {
+
+              if(loading){
+                return (
+              <center>
+                <MagicSpinner size={50} color="#6cd404" loading={loading} />
+              </center>
+                )
+              } 
+
+              if(error){
+                return (
+                  <center>
+                    <ErrorMessage error={error} message={"Unable to get Projects"} />
+                  </center>
+                )
+              }
+              
+
+              if(_.isEmpty(data) || data.projects.length <= 0) {
+                  return <center><Alert bsStyle="info"><h4>No Projects</h4></Alert></center>
+                } else {
+                  return (
+                  data.projects.map((project, i) => (
+                      <Project name={project.title}
+                      type={this.rules.getRuleTranslation(project.rulebook)}
+                      key={project.id}
+                      projectID={project.id}
+                      rulebook={project.rulebook}
+                      />
+                    )
+                  )
+                  )
+                }
+            }}
+          </Query>
 
           <center>
             <button onClick={this.toggleModal}>+</button>
@@ -89,7 +150,21 @@ class ProjectView extends React.Component {
                 <label>{this.state.warningLabel}</label>
               </center>
 
-              <form onSubmit={this.handleFormSubmit}>
+            <Mutation mutation={CREATEPROJECT} update={(cache, { data: { createProject }}) => {
+              const { projects } = cache.readQuery({ query: PROJECTS })
+              cache.writeQuery({
+                query: PROJECTS,
+                data: { projects: projects.concat([createProject])}
+              })
+            }}>
+            {createProject => (
+              <form onSubmit={
+                /* this.handleFormSubmit */
+                e => {
+                  e.preventDefault()
+                  this.addProject(createProject);
+                }
+                }>
                 <Grid>
                   <Row className="">
                     <Col md={4} mdPush={4}>
@@ -101,9 +176,9 @@ class ProjectView extends React.Component {
                                 <input
                                   className="inputRadio"
                                   type="radio"
-                                  value="Symbaroum"
+                                  value="SYMBAROUM"
                                   checked={
-                                    this.state.selectedOption === "Symbaroum"
+                                    this.state.selectedOption === "SYMBAROUM"
                                   }
                                   onChange={this.handleOptionChange}
                                 />
@@ -122,10 +197,10 @@ class ProjectView extends React.Component {
                               <label>
                                 <input
                                   type="radio"
-                                  value="Call of Cthulu"
+                                  value="COC"
                                   checked={
                                     this.state.selectedOption ===
-                                    "Call of Cthulu"
+                                    "COC"
                                   }
                                   onChange={this.handleOptionChange}
                                 />
@@ -144,10 +219,10 @@ class ProjectView extends React.Component {
                               <label>
                                 <input
                                   type="radio"
-                                  value="Das Schwarze Auge"
+                                  value="DSA"
                                   checked={
                                     this.state.selectedOption ===
-                                    "Das Schwarze Auge"
+                                    "DSA"
                                   }
                                   onChange={this.handleOptionChange}
                                 />
@@ -160,18 +235,22 @@ class ProjectView extends React.Component {
                     </Col>
                   </Row>
                 </Grid>
-              </form>
-
-              <center>
+                <center>
                 <button
                   id="createProject"
-                  onClick={e => {
+                  /* onClick={e => {
                     this.addProject(this.state.projects);
-                  }}
+                  }} */
+                  type="submit"
                 >
                   create Project
                 </button>
               </center>
+              </form>
+            )}  
+            </Mutation>
+
+              
             </Modal>
           </center>
         </div>

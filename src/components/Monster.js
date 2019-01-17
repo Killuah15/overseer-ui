@@ -50,6 +50,7 @@ class Monster extends Component {
             <center>{this.state.name}</center>
           </h5>
         </div>
+          <button /* type='submit' */ onClick={this.state.deleteMonster}>delete</button>
 
         <Grid>
           <Row className="MonsterStats">

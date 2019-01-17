@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import "../public/styles/App.css";
-import { Button, Grid, Row, Col, Clearfix, Panel } from "react-bootstrap";
+import { Button, Grid, Row, Col, Clearfix, Panel, Alert } from "react-bootstrap";
 import EventCard from "./EventCard";
 import Trash from "./Trash";
 import Monster from "./Monster";
 import HTML5Backend from "react-dnd-html5-backend";
 import { NavLink } from "react-router-dom";
 import { DragDropContext } from "react-dnd";
+import { Query, Mutation } from "react-apollo";
+import { MagicSpinner } from 'react-spinners-kit';
+import _ from 'lodash';
+import { EVENTS, CREATURES } from '../apollo/templates/Queries';
+import { CREATECREATURE, DELETECREATURE } from '../apollo/templates/Mutations';
+import ErrorMessage from '../apollo/ErrorMessage';
+import client from "../apollo/client";
 const update = require("immutability-helper");
 
 var newkey = 5;
@@ -14,27 +21,44 @@ var newkey = 5;
 class App extends Component {
   state = {
     trashVis: true,
-    selectedOption: "Turtle",
-    textValue: "Test",
-    monsterData: ["Turtle", "Fly", "Bird", "Wolf", "Lion"],
+    selectedOption: '',
+    textValue: '',
+    monsterData: [],
     monsters: [],
-    cards: [
-      {
-        id: 1,
-        text: "This is an Event",
-        key: 1,
-        active: true,
-        eventType: "Default"
-      },
-      {
-        id: 2,
-        text: "Wild Turtle Attacks!",
-        key: 2,
-        active: true,
-        eventType: "Combat"
-      }
-    ]
+    cards: [],
+    projectID: this.props.location.state.projectID,
+    rulebook: this.props.location.state.rulebook,
+    currentEvent: null
   };
+
+  async componentDidMount(){
+
+    const cards = await client.query({
+      query: EVENTS,
+      variables: {
+        projectID: this.state.projectID
+      }
+    })
+
+    const monsters = await client.query({
+      query: CREATURES,
+      variables: {
+        fromRulebook: this.state.rulebook
+      }
+    })
+
+    cards.data.events.forEach(element => {
+      element.active = true
+    });
+
+    this.setState({
+      cards: cards.data.events,
+      monsterData: monsters.data.creatures,
+      selectedOption: monsters.data.creatures[0].name,
+      currentEvent: cards.data.events[0] ? cards.data.events[0].id : null,
+      textValue: cards.data.events[0] ? cards.data.events[0].title : '',
+    })
+  }
 
   deleteItem = id => {
     this.setState(prevState => {
@@ -46,6 +70,7 @@ class App extends Component {
   };
 
   toggleChecked(index) {
+
     const card = this.state.cards[index];
 
     this.setState(e => {
@@ -56,10 +81,19 @@ class App extends Component {
         card.active = true;
         return { card };
       }
-    });
+    }); 
 
-    console.log(card.eventType);
+    console.log(card.eventRole);
   }
+
+  async showEvent(event) {
+
+    const monstersOfEvent = await client.query({
+      query: CREATURES,
+      variables: {
+        eventID: event.id
+      }
+    })
 
   toggleTrashVisible(vis) {
     this.setState({
@@ -70,10 +104,12 @@ class App extends Component {
 
   showEvent(eType) {
     this.setState({
-      textValue: eType
+      textValue: event.title,
+      currentEvent: event.id,
+      monsters: monstersOfEvent.data.creatures
     });
 
-    console.log(eType);
+    console.log(event.eventRole);
   }
 
   moveCard = (dragIndex, hoverIndex) => {
@@ -89,7 +125,7 @@ class App extends Component {
     );
   };
 
-  addCard(cards, eType) {
+  async addCard(cards, eType) {
     console.log("new Card");
     console.log(cards);
     newkey++;
@@ -113,8 +149,9 @@ class App extends Component {
     let selection = [];
 
     for (let i = 0; i < this.state.monsterData.length; i++) {
-      selection.push(<option>{this.state.monsterData[i]}</option>);
+      selection.push(<option>{this.state.monsterData[i].name}</option>);
     }
+
     return selection;
   }
 
@@ -130,7 +167,7 @@ class App extends Component {
       monsters.push({
         name: this.state.selectedOption,
         attack: "20",
-        id: monsters.length,
+        id: monsters.id,
         key: newkey
       });
       return { monsters };
@@ -138,12 +175,39 @@ class App extends Component {
   }
 
   deleteMonster = id => {
-    this.setState(prevState => {
+
+    client.mutate({
+      mutation: DELETECREATURE,
+      variables: {
+        id
+      },
+      update: (cache, { data: { deleteCreature }}) => {
+        
+        const { creatures } = cache.readQuery({
+          query: CREATURES,
+          variables: {
+            eventID: this.state.currentEvent
+          }
+        })
+
+        cache.writeQuery({
+          query: CREATURES,
+          variables: {
+            eventID: this.state.currentEvent
+          },
+          data: {
+            creatures: creatures.filter(creature => creature.id !== deleteCreature.id)
+          }
+        })
+      }
+    })
+
+    /* this.setState(prevState => {
       return {
         monsters: prevState.monsters.filter(monster => monster.id !== id)
       };
     });
-    console.log("deleting id:" + id);
+    console.log("deleting id:" + id); */
   };
 
   render() {
@@ -165,34 +229,132 @@ class App extends Component {
                   <div className="eventInfo">
                     <h4>{this.state.textValue}</h4>
                     <br />
+                    <Query
+                    query={CREATURES}
+                    variables={{
+                      eventID: this.state.currentEvent
+                    }}>
+                    {({ loading, error, data }) => {
                     <div className="eventInfoArea" id="style-1">
-                      {this.state.monsters.map((monsters, i) => (
-                        <Monster
-                          key={monsters.key}
-                          name={monsters.name}
-                          attack={monsters.attack}
-                          deleteMonster={e => this.deleteMonster(i)}
-                          id={monsters.id}
-                        />
-                      ))}
-                    </div>
 
-                    <div className="addMonsterMenu">
-                      <select
-                        value={this.state.selectedOption}
-                        onChange={this.handleOptionChange}
+                      if(loading){
+                        return (
+                      <center>
+                        <MagicSpinner size={50} color="#6cd404" loading={loading} />
+                      </center>
+                        )
+                      } 
+        
+                      if(error){
+                        return (
+                          <center>
+                            <ErrorMessage error={error} message={"Unable to get Projects"} />
+                          </center>
+                        )
+                      }
+
+                      if(_.isEmpty(data) || data.creatures.length <= 0) {
+                        return <center><Alert bsStyle="info"><h4>No Creatures in this Event</h4></Alert></center>
+                      } else {
+                        return (
+                          {data.creatures.map((monster, i) => (
+                            <Monster
+                              key={monster.id}
+                              name={monster.name}
+                              attack={monster.Conditions.physical.fitness.toughness}
+                              deleteMonster={e => this.deleteMonster(monster.id)}
+                              id={monster.id}
+                              rulebook={this.state.rulebook}
+                            />
+                          ))}
+                        </div>
+                        )
+                      }
+                      }}
+                    </Query>
+                    <select
+                      value={this.state.selectedOption}
+                      onChange={this.handleOptionChange}
                         className="addMonsterMenuOption"
+                    >
+                      {this.fillMonsterList()}
+                    </select>
+                    <Mutation
+                    mutation={CREATECREATURE}
+                    update={(cache, { data : { createCreature }}) => {
+
+                      const { creatures } = cache.readQuery({
+                        query: CREATURES,
+                        variables: {
+                          eventID: this.state.currentEvent
+                        }
+                      })
+
+                      cache.writeQuery({
+                        query: CREATURES,
+                        variables: {
+                          eventID: this.state.currentEvent
+                        },
+                        data: {
+                          creatures: creatures.concat(createCreature)
+                        }
+                      })
+
+                    }}
+                    >
+                    {createCreature => (
+                      <form
+                      onSubmit={e => {
+                        e.preventDefault()
+                        const monster = this.state.monsterData.filter(monster => monster.name === this.state.selectedOption)[0]
+
+                        createCreature({
+                          variables: {
+                            data: {
+                              event: this.state.currentEvent,
+                              name: monster.name,
+                              race: monster.race,
+                              shadow: monster.shadow,
+                              rulebook: this.state.rulebook,
+                              Conditions: {
+                                physical: {
+                                  fitness: {
+                                    painThreshold: monster.Conditions.physical.fitness.painThreshold,
+                                    toughness: monster.Conditions.physical.fitness.toughness
+                                  }
+                                },
+                                spiritual: {
+                                  corruption: {
+                                    current: monster.Conditions.spiritual.corruption.current,
+                                    threshold: monster.Conditions.spiritual.corruption.threshold,
+                                    permanent: monster.Conditions.spiritual.corruption.permanent
+                                  }
+                                }
+                              },
+                              attributes: {
+                                accurate: monster.attributes.accurate,
+                                cunning: monster.attributes.cunning,
+                                discreet: monster.attributes.discreet,
+                                persuasive: monster.attributes.persuasive,
+                                quick: monster.attributes.quick,
+                                resolute: monster.attributes.resolute,
+                                strong: monster.attributes.strong,
+                                vigilant: monster.attributes.vigilant,
+                                defense: monster.attributes.defense
+                              }
+                            }
+                          }
+                        })
+                      }}
                       >
-                        {this.fillMonsterList()}
-                      </select>
-                      <button
-                        onClick={e => {
-                          this.addMonster(this.state.monsters);
-                        }}
-                      >
-                        add
-                      </button>
-                    </div>
+                        <button
+                        type='submit'
+                        >
+                          add
+                        </button>
+                      </form>
+                    )}
+                    </Mutation>
                   </div>
                 }
               </code>
@@ -204,24 +366,23 @@ class App extends Component {
                     <div className="Events">
                       <h1>Events</h1>
                       <br />
-                      <center>
-                        <div className="eventsArea" id="style-1">
-                          {this.state.cards.map((card, i) => (
-                            <EventCard
-                              key={card.key}
-                              index={i}
-                              id={card.id}
-                              text={card.text}
-                              item={card}
-                              active={card.active}
-                              eventType={card.eventType}
-                              moveCard={this.moveCard}
-                              toggleChecked={e => this.toggleChecked(i)}
-                              showEvent={e => this.showEvent(card.eventType)}
-                              handleDrop={id => this.deleteItem(id)}
+                        <center>
+                          <div className="eventsArea" id="style-1">
+                             {this.state.cards.map((event, i) => (
+                               <EventCard
+                                 key={event.id}
+                                 index={i}
+                                 id={event.id}
+                                 text={event.title}
+                                 item={event}
+                                 active={event.active}
+                                 eventType={event.eventRole}
+                                 moveCard={this.moveCard}
+                                 toggleChecked={e => this.toggleChecked(i)}
+                                 showEvent={e => this.showEvent(event)}
+                                 handleDrop={id => this.deleteItem(id)}
                               toggleTrashVisible={e =>
                                 this.toggleTrashVisible(this.state.trashVis)
-                              }
                             />
                           ))}
                         </div>

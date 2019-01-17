@@ -4,11 +4,12 @@
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "apollo-boost": "^0.1.17",
+    "apollo-boost": "^0.1.23",
     "bootstrap": "^4.2.1",
     "graphql": "^14.0.2",
     "history": "^4.7.2",
     "immutability-helper": "^2.8.1",
+    "lodash": "^4.17.11",
     "react": "^16.7.0",
     "react-apollo": "^2.2.4",
     "react-bootstrap": "^0.32.4",
