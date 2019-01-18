@@ -1,8 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { findDOMNode } from "react-dom";
-import { DragSource, DropTarget } from "react-dnd";
-import flow from "lodash/flow";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { findDOMNode } from 'react-dom'
+import { DragSource, DropTarget } from 'react-dnd'
+import { MagicSpinner } from 'react-spinners-kit';
+import flow from 'lodash/flow'
 //import "./App.css";
 
 const cardSource = {
@@ -14,89 +15,93 @@ const cardSource = {
       item: props.item,
       active: props.active,
       eventType: props.eventType,
-      subtype: "somestuff"
-    };
+      subtype: 'somestuff'
+    }
   },
   endDrag(props, monitor, component) {
+
     if (!monitor.didDrop()) {
-      return;
-    } else if (monitor.getDropResult().subtype === "somestuff") {
-      props.handleDrop(props.item.id);
+      props.updateIndices(props.item)
+      return
+    } else if (monitor.getDropResult().subtype === 'somestuff') {
+      props.handleDrop(props.item.id)
+    } else {
+      props.updateIndices(props.item)
     }
   }
-};
+}
 
 const cardTarget = {
   hover(props, monitor, component) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
+    const dragIndex = monitor.getItem().index
+    const hoverIndex = props.index
 
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
-      return;
+      return
     }
 
     // Determine rectangle on screen
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect()
 
     // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
 
     // Determine mouse position
-    const clientOffset = monitor.getClientOffset();
+    const clientOffset = monitor.getClientOffset()
 
     // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top
 
     // Only perform the move when the mouse has crossed half of the items height
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
     // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-      return;
+      return
     }
 
     // Dragging upwards
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-      return;
+      return
     }
 
     // Time to actually perform the action
-    props.moveCard(dragIndex, hoverIndex);
+    props.moveCard(dragIndex, hoverIndex)
 
     // Note: we're mutating the monitor item here!
     // Generally it's better to avoid mutations,
     // but it's good here for the sake of performance
     // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex;
+    monitor.getItem().index = hoverIndex
   }
-};
+}
 
 function eventClassName(eType, isActive) {
   switch (eType) {
-    case "GENERIC":
+    case 'GENERIC':
       if (isActive) {
-        return "eventDefault";
+        return 'eventDefault'
       } else {
-        return "eventDefaultChecked";
+        return 'eventDefaultChecked'
       }
 
-    case "COMBAT":
+    case 'COMBAT':
       if (isActive) {
-        return "eventCombat";
+        return 'eventCombat'
       } else {
-        return "eventCombatChecked";
+        return 'eventCombatChecked'
       }
 
-    case "QUEST":
+    case 'QUEST':
       if (isActive) {
-        return "eventQuest";
+        return 'eventQuest'
       } else {
-        return "eventQuestChecked";
+        return 'eventQuestChecked'
       }
 
     default:
-      return "eventDefault";
+      return 'eventDefault'
   }
 }
 
@@ -109,7 +114,7 @@ class EventCard extends React.Component {
     id: PropTypes.any.isRequired,
     text: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired
-  };
+  }
 
   render() {
     const {
@@ -122,42 +127,42 @@ class EventCard extends React.Component {
       active,
       toggleTrashVisible,
       eventType
-    } = this.props;
-    const opacity = isDragging ? 0 : 1;
+    } = this.props
+    const opacity = isDragging ? 0 : 1
 
-    return (
-      connectDragSource &&
-      connectDropTarget &&
-      connectDragSource(
-        connectDropTarget(
-          <div
-            style={{ opacity }}
-            className={eventClassName(eventType, active)}
-          >
-            {
-              <button className="infoButton" onClick={showEvent}>
-                -
-              </button>
-            }
-            {text}
-            {
-              <button className="checkedButton" onClick={toggleChecked}>
-                /
-              </button>
-            }
-          </div>
+      return (
+        connectDragSource &&
+        connectDropTarget &&
+        connectDragSource(
+          connectDropTarget(
+            <div
+              style={{ opacity }}
+              className={eventClassName(eventType, active)}
+            >
+              {
+                <button className="infoButton" onClick={showEvent}>
+                  -
+                </button>
+              }
+              {text}
+              {
+                <button className="checkedButton" onClick={toggleChecked}>
+                  /
+                </button>
+              }
+            </div>
+          )
         )
       )
-    );
   }
 }
 
 export default flow(
-  DragSource("card", cardSource, (connect, monitor) => ({
+  DragSource('card', cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   })),
-  DropTarget("card", cardTarget, connect => ({
+  DropTarget('card', cardTarget, connect => ({
     connectDropTarget: connect.dropTarget()
   }))
-)(EventCard);
+)(EventCard)
