@@ -112,3 +112,14 @@ export const DELETEEVENT = gql`
     }
   }
 `
+
+export const UPDATEEVENT = gql`
+  mutation updateEvent($id: ID!, $data: uEventInput){
+    updateEvent(id: $id, data: $data){
+      id
+      title
+      eventRole
+      index
+    }
+  }
+`

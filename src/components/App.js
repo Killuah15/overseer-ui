@@ -11,7 +11,7 @@ import { Query, Mutation } from "react-apollo";
 import { MagicSpinner } from 'react-spinners-kit';
 import _ from 'lodash';
 import { EVENTS, CREATURES } from '../apollo/templates/Queries';
-import { CREATECREATURE, DELETECREATURE, CREATEEVENT, DELETEEVENT } from '../apollo/templates/Mutations';
+import { CREATECREATURE, DELETECREATURE, CREATEEVENT, DELETEEVENT, UPDATEEVENT } from '../apollo/templates/Mutations';
 import ErrorMessage from '../apollo/ErrorMessage';
 import client from "../apollo/client";
 const update = require("immutability-helper");
@@ -61,10 +61,54 @@ class App extends Component {
     })
   }
 
-  updateEventIndices = async droppedEvent => {
-    const droppedEventIdx = _.findIndex(this.state.cards, card => card.id === droppedEvent.id)
-    const cardsLastIdx = this.state.cards.length - 1 
-    const difIndices = Math.abs(droppedEventIdx - cardsLastIdx)
+  updateEventIndices = () => {
+
+    if(this.state.eventsLoading)
+      return
+
+    this.setState({
+      eventsLoading: true
+    })
+
+    this.state.cards.map(card => {
+      client.mutate({
+        mutation: UPDATEEVENT,
+        variables: {
+          id: card.id,
+          data: {
+            index: _.findIndex(this.state.cards, cachedCard => cachedCard.id === card.id)
+          }
+        }
+      })
+    })
+
+    this.setState({
+      eventsLoading: false
+    })
+
+    /* const cachedIndex = _.findIndex(this.state.cards, card => card.id === droppedEvent.id)
+    const iterationBorder = Math.abs(cachedIndex - droppedEvent.index)
+    let movedUp = null
+
+    if(cachedIndex - droppedEvent.index < 0)
+      movedUp = true
+    else if(cachedIndex - droppedEvent.index > 0)
+      movedUp = false
+    else
+      movedUp = null
+
+    console.log(droppedEvent.index, iterationBorder, cachedIndex);
+    
+    if(movedUp === null) {
+      return
+    } else if (movedUp === true) {
+      for (let index = cachedIndex; index <= cachedIndex + iterationBorder; index++) {
+        const element = this.state.cards[index];
+        console.log(element.id);
+      }
+    } else {
+
+    } */
 
     //TODO: update the events indices
 
@@ -79,6 +123,9 @@ class App extends Component {
   }
 
   deleteItem = async id => {
+
+    if(this.state.eventsLoading)
+      return
 
     this.setState({
       eventsLoading: true
@@ -176,6 +223,9 @@ class App extends Component {
   };
 
   async addCard(eType) {
+
+    if(this.state.eventsLoading)
+      return
 
     this.setState({
       eventsLoading: true
