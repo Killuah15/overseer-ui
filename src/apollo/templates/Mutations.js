@@ -96,7 +96,17 @@ export const CREATEEVENT = gql`
     createEvent(data: $data){
       id
       title
-      description
+      eventRole
+      index
+    }
+  }
+`
+
+export const DELETEEVENT = gql`
+  mutation deleteEvent($id: ID!){
+    deleteEvent(id: $id){
+      id
+      title
       eventRole
       index
     }

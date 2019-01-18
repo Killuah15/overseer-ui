@@ -11,7 +11,7 @@ import { Query, Mutation } from "react-apollo";
 import { MagicSpinner } from 'react-spinners-kit';
 import _ from 'lodash';
 import { EVENTS, CREATURES } from '../apollo/templates/Queries';
-import { CREATECREATURE, DELETECREATURE, CREATEEVENT } from '../apollo/templates/Mutations';
+import { CREATECREATURE, DELETECREATURE, CREATEEVENT, DELETEEVENT } from '../apollo/templates/Mutations';
 import ErrorMessage from '../apollo/ErrorMessage';
 import client from "../apollo/client";
 const update = require("immutability-helper");
@@ -28,7 +28,8 @@ class App extends Component {
     cards: [],
     projectID: this.props.location.state.projectID,
     rulebook: this.props.location.state.rulebook,
-    currentEvent: null
+    currentEvent: null,
+    eventsLoading: false
   };
 
   async componentDidMount(){
@@ -60,13 +61,63 @@ class App extends Component {
     })
   }
 
-  deleteItem = id => {
+  updateEventIndices = async droppedEvent => {
+    const droppedEventIdx = _.findIndex(this.state.cards, card => card.id === droppedEvent.id)
+    const cardsLastIdx = this.state.cards.length - 1 
+    const difIndices = Math.abs(droppedEventIdx - cardsLastIdx)
+
+    //TODO: update the events indices
+
+    /* console.log(difIndices);
+
+    if(difIndices < 0)
+      return
+
+    for (let index = droppedEventIdx; index <= cardsLastIdx; index++) {
+      console.log(this.state.cards[index]);      
+    } */
+  }
+
+  deleteItem = async id => {
+
+    this.setState({
+      eventsLoading: true
+    })
+
+    const {data: { deleteEvent }} = await client.mutate({
+      mutation: DELETEEVENT,
+      variables: {
+        id
+      },
+      update: (cache, { data: { deleteEvent }}) => {
+        
+        const { events } = cache.readQuery({
+          query: EVENTS,
+          variables: {
+            projectID: this.state.projectID
+          }
+        })
+
+        cache.writeQuery({
+          query: EVENTS,
+          variables: {
+            projectID: this.state.projectID
+          },
+          data: {
+            events: events.filter(event => event.id !== deleteEvent.id)
+          }
+        })
+      } 
+    })
+
     this.setState(prevState => {
       return {
-        cards: prevState.cards.filter(card => card.id !== id)
+        cards: prevState.cards.filter(card => card.id !== deleteEvent.id),
+        currentEvent: prevState.currentEvent === id ? null : prevState.currentEvent,
+        textValue: prevState.currentEvent === id ? '' : prevState.textValue,
+        eventsLoading: false
       };
     });
-    console.log("deleting id:" + id);
   };
 
   toggleChecked(index) {
@@ -124,13 +175,15 @@ class App extends Component {
     );
   };
 
-  async addCard(cards, eType) {
-    console.log("new Card");
-    console.log(cards);
+  async addCard(eType) {
+
+    this.setState({
+      eventsLoading: true
+    })
 
     if (this.refs.eventText.value !== "") {
 
-      const nextCard = await client.mutate({
+      const { data: { createEvent }} = await client.mutate({
         mutation: CREATEEVENT,
         variables: {
           data: {
@@ -156,25 +209,25 @@ class App extends Component {
               projectID: this.state.projectID
             },
             data: {
-              events: events.filter(event => event.id !== createEvent.id)
+              events: events.concat([createEvent])
             }
           })
         }
       })
 
-      this.setState(e => {
-        cards.push({
-          id: nextCard.id,
-          text: nextCard.title,
-          key: nextCard.id,
-          active: true,
-          eventType: nextCard.eventRole
-        });
-        this.refs.eventText.value = "";
-        return { cards };
+
+      createEvent.active = true
+
+      this.setState({
+        cards: [...this.state.cards, createEvent],
+        currentEvent: this.state.cards.length === 0 && createEvent !== null && createEvent !== undefined ? createEvent.id : this.state.currentEvent,
+        textValue: this.state.cards.length === 0 && createEvent !== null && createEvent !== undefined ? createEvent.title : this.state.textValue,
+        eventsLoading: false
       });
 
-      /* console.log(cards); */
+
+      this.refs.eventText.value = "";
+        return this.state.cards;
     }
   }
 
@@ -194,7 +247,7 @@ class App extends Component {
     });
   };
 
-  addMonster(monsters) {
+ /*  addMonster(monsters) {
     newkey++;
     this.setState(e => {
       monsters.push({
@@ -205,7 +258,7 @@ class App extends Component {
       });
       return { monsters };
     });
-  }
+  } */
 
   deleteMonster = id => {
 
@@ -396,8 +449,10 @@ class App extends Component {
                       <h1>Events</h1>
                       <br />
                         <center>
+                        {this.state.eventsLoading === true && <MagicSpinner size={50} color="#6cd404" loading={true} />}
                           <div className="eventsArea" id="style-1">
-                             {this.state.cards.map((event, i) => (
+                               {
+                               this.state.cards.map((event, i) => (
                                <EventCard
                                 key={event.id}
                                 index={i}
@@ -407,9 +462,10 @@ class App extends Component {
                                 active={event.active}
                                 eventType={event.eventRole}
                                 moveCard={this.moveCard}
+                                updateIndices={this.updateEventIndices}
                                 toggleChecked={e => this.toggleChecked(i)}
                                 showEvent={e => this.showEvent(event)}
-                                handleDrop={id => this.deleteItem(id)}
+                                handleDrop={id => this.deleteItem(event.id)}
                                 toggleTrashVisible={e => this.toggleTrashVisible(this.state.trashVis)}
                             />
                           ))}
@@ -428,7 +484,7 @@ class App extends Component {
                           <button
                             className="createButtonDefault"
                             onClick={e => {
-                              this.addCard(this.state.cards, "GENERIC");
+                              this.addCard("GENERIC");
                             }}
                           >
                             Default
@@ -436,7 +492,7 @@ class App extends Component {
                           <button
                             className="createButtonCombat"
                             onClick={e => {
-                              this.addCard(this.state.cards, "COMBAT");
+                              this.addCard("COMBAT");
                             }}
                           >
                             Combat
@@ -444,7 +500,7 @@ class App extends Component {
                           <button
                             className="createButtonQuest"
                             onClick={e => {
-                              this.addCard(this.state.cards, "QUEST");
+                              this.addCard("QUEST");
                             }}
                           >
                             Quest

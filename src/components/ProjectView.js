@@ -71,7 +71,6 @@ class ProjectView extends React.Component {
       <div className="">
         <div className="projectBackground" />
         <div className="projectContent">
-          {/* <NavLink to="/" className=""> */}
           <Mutation
           mutation={LOGOUT}
           onCompleted={() => {this.props.history.push('/')}}
@@ -88,7 +87,6 @@ class ProjectView extends React.Component {
           </form>
           )}
           </Mutation>
-          {/* </NavLink> */}
         </div>
         <div className="ProjectView">
           <div className="formHeader">Projects</div>
