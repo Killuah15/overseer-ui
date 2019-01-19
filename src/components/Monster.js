@@ -61,42 +61,79 @@ class Monster extends Component {
           </h6>
         </div>
         <Grid>
-          <Row className="MonsterStats">
-            <Col md={6} mdPush={6}>
-              <Row>
-                {" "}
-                <code>{<div className="MonsterStats">ATK</div>}</code>
-              </Row>
-              <Row>
-                {" "}
-                <code>
-                  {<div className="MonsterStats">{this.state.attack}</div>}
-                </code>
-              </Row>
-            </Col>
-            <Col md={6} mdPull={6}>
-              <Row>
-                {" "}
-                <code>{<div className="MonsterStats">ATK</div>}</code>
-              </Row>
-              <Row>
-                {" "}
-                <code>
-                  {<div className="MonsterStats">{this.state.attack}</div>}
-                </code>
-              </Row>
+          <Row>
+            <Col md={12}>
+              <div>
+                <table style={{ borderRadius: "5rem" }}>
+                  <tr>
+                    <td className="toughness">
+                      <div className="MonsterStats" />
+                    </td>
+                    <td className="toughness">
+                      <div className="MonsterStats">Toughness</div>
+                    </td>
+                    <td className="toughness">
+                      <div className="MonsterStats" />
+                    </td>
+                    <td className="corruption">
+                      <div className="MonsterStats" />
+                    </td>
+                    <td className="corruption">
+                      <div className="MonsterStats">Corruption</div>
+                    </td>
+                    <td className="corruption">
+                      <div className="MonsterStats" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="pain">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.cunning}
+                      </div>
+                    </td>
+                    <td className="toughness">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.accurate}
+                      </div>
+                    </td>
+                    <td className="tougnessMax">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.accurate}
+                      </div>
+                    </td>
+
+                    <td className="corruptionThresh">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.cunning}
+                      </div>
+                    </td>
+                    <td className="corruption">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.discreet}
+                      </div>
+                    </td>
+                    <td className="corruptionPerm">
+                      <div className="MonsterStats">
+                        {this.state.monster.attributes.discreet}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr />
+                  <tr />
+                </table>
+              </div>
             </Col>
           </Row>
           <Row className="monsterCollapseButtons">
-            <Col md={4}>
+            <Col xs={4} md={4}>
               {" "}
               <button onClick={this.toggleStats}>Stats</button>
             </Col>
-            <Col md={4}>
+            <Col xs={4} md={4}>
               {" "}
               <button onClick={this.toggleAbilities}>Abilities</button>
             </Col>
-            <Col md={4}>
+            <Col xs={4} md={4}>
               {" "}
               <button onClick={this.toggleDescription}>Description</button>
             </Col>

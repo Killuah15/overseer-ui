@@ -162,6 +162,7 @@ input {
   padding: 0.5rem;
   padding-left: 1rem;
   width: 100%;
+  border-radius: 0.3rem;
 }
 
 .formHeader {
@@ -353,6 +354,7 @@ input[type="radio"] + span {
   border-style: solid;
   border-width: 0.1rem;
   border-color: #cd4a25;
+  border-radius: 0.3rem;
   color: white;
   text-align: center;
 }
@@ -366,6 +368,8 @@ input[type="radio"] + span {
 table {
   width: 100%;
   margin-bottom: 0.5rem;
+
+  border-radius: 20px !important;
 }
 
 td {
@@ -378,6 +382,34 @@ td {
 
 .td2 {
   background-color: #313741;
+}
+
+.toughness {
+  background-color: #551915;
+}
+
+.tougnessMax {
+  background-color: #3d0c09;
+  width: 16%;
+}
+
+.pain {
+  background-color: #742722;
+  width: 16%;
+}
+
+.corruptionThresh {
+  background-color: #1d3c6d;
+  width: 16%;
+}
+
+.corruption {
+  background-color: #152e55;
+}
+
+.corruptionPerm {
+  background-color: #0d203d;
+  width: 16%;
 }
 
 .MonsterAbility {
@@ -408,6 +440,7 @@ td {
 .monsterCollapseButtons {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 #monsterDelete {
