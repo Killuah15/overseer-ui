@@ -66,23 +66,12 @@ class Monster extends Component {
               <div>
                 <table style={{ borderRadius: "5rem" }}>
                   <tr>
-                    <td className="toughness">
-                      <div className="MonsterStats" />
-                    </td>
-                    <td className="toughness">
+                    <td colspan="3" className="toughness">
                       <div className="MonsterStats">Toughness</div>
                     </td>
-                    <td className="toughness">
-                      <div className="MonsterStats" />
-                    </td>
-                    <td className="corruption">
-                      <div className="MonsterStats" />
-                    </td>
-                    <td className="corruption">
+
+                    <td colspan="3" className="corruption">
                       <div className="MonsterStats">Corruption</div>
-                    </td>
-                    <td className="corruption">
-                      <div className="MonsterStats" />
                     </td>
                   </tr>
                   <tr>
