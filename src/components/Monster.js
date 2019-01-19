@@ -15,7 +15,8 @@ class Monster extends Component {
       openDescription: false,
       openStats: false,
       name: props.name,
-      attack: props.attack
+      attack: props.attack,
+      monster: props.monster
     };
   }
 
@@ -124,22 +125,22 @@ class Monster extends Component {
                         <tr>
                           <td className="td1">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.accurate}
                             </div>
                           </td>
                           <td className="td2">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.cunning}
                             </div>
                           </td>
                           <td className="td1">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.discreet}
                             </div>
                           </td>
                           <td className="td2">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.persuasive}
                             </div>
                           </td>
                         </tr>
@@ -160,22 +161,22 @@ class Monster extends Component {
                         <tr>
                           <td className="td2">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.quick}
                             </div>
                           </td>
                           <td className="td1">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.resolute}
                             </div>
                           </td>
                           <td className="td2">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.strong}
                             </div>
                           </td>
                           <td className="td1">
                             <div className="MonsterStats">
-                              {this.state.attack}
+                              {this.state.monster.attributes.vigilant}
                             </div>
                           </td>
                         </tr>
