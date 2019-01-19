@@ -8,7 +8,7 @@ import _ from "lodash";
 import { MagicSpinner } from "react-spinners-kit";
 import ErrorMessage from "../apollo/ErrorMessage";
 import { PROJECTS } from "../apollo/templates/Queries";
-import { CREATEPROJECT, LOGOUT } from "../apollo/templates/Mutations";
+import { CREATEPROJECT, LOGOUT, DELETEPROJECT } from "../apollo/templates/Mutations";
 import client from "../apollo/client";
 import Rules from "../apollo/Rules";
 
@@ -22,12 +22,7 @@ class ProjectView extends React.Component {
       selectedOption: "Symbaroum",
       warningLabel: "",
       isActive: false,
-      projects: [
-        {
-          name: "Sample Project",
-          type: "Symbaroum"
-        }
-      ]
+      projectsLoading: false      
     };
   }
 
@@ -50,6 +45,11 @@ class ProjectView extends React.Component {
 
   addProject(createProjectMutation) {
     if (this.refs.projectName.value !== "") {
+
+      this.setState({
+        projectsLoading: true
+      })
+
       /* this.setState(e => {
         this.toggleModal();
         projects.push({
@@ -69,15 +69,46 @@ class ProjectView extends React.Component {
     } else {
       this.setState({ warningLabel: "Please type in a Project Name" });
     }
+
+    this.setState({
+      projectsLoading: false
+    })
   }
 
-  deleteProject = id => {
-    this.setState(prevState => {
+  deleteProject = async id => {
+
+    this.setState({
+      projectsLoading: true
+    })
+    /* this.setState(prevState => {
       return {
         projects: prevState.projects.filter(project => project.id !== id)
       };
     });
-    console.log("deleting id:" + id);
+    console.log("deleting id:" + id); */
+
+    const { data: { deleteProject }} = await client.mutate({
+      mutation: DELETEPROJECT,
+      variables: {
+        id
+      },
+      update: (cache, { data: { deleteProject }}) => {
+        const { projects } = cache.readQuery({ query: PROJECTS })
+
+        cache.writeQuery({
+          query: PROJECTS,
+          data: {
+            projects: projects.filter(project => project.id !== deleteProject.id)
+          }
+        })
+      }
+    })
+
+    console.log(deleteProject);
+
+    this.setState({
+      projectsLoading: false
+    })
   };
 
   render() {
@@ -110,6 +141,10 @@ class ProjectView extends React.Component {
         </div>
         <div className="ProjectView">
           <div className="formHeader">Projects</div>
+
+          <center>
+            <MagicSpinner loading={this.state.projectsLoading} size={50} color="#6cd404" />
+          </center>
 
           <Query query={PROJECTS}>
             {({ loading, error, data }) => {

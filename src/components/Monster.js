@@ -16,7 +16,10 @@ class Monster extends Component {
       openStats: false,
       name: props.name,
       attack: props.attack,
-      monster: props.monster
+      monster: props.monster,
+      Conditions: props.monster.Conditions,
+      attributes: props.monster.attributes,
+      maxToughness: props.monster.Conditions.physical.fitness.toughness
     };
   }
 
@@ -77,33 +80,40 @@ class Monster extends Component {
                   <tr>
                     <td className="pain">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.cunning}
+                      <center>Threshold<br/></center>
+                        {this.state.Conditions.physical.fitness.painThreshold}
                       </div>
                     </td>
                     <td className="toughness">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.accurate}
+                      {console.log(this.state.Conditions)}
+                      <center>Current<br/></center>
+                        {this.state.Conditions.physical.fitness.toughness}
                       </div>
                     </td>
                     <td className="tougnessMax">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.accurate}
+                      <center>Max<br/></center>
+                        {this.state.maxToughness}
                       </div>
                     </td>
 
                     <td className="corruptionThresh">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.cunning}
+                      <center>Threshold<br/></center>
+                        {this.state.Conditions.spiritual.corruption.threshold}
                       </div>
                     </td>
                     <td className="corruption">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.discreet}
+                      <center>Current<br/></center>
+                        {this.state.Conditions.spiritual.corruption.current}
                       </div>
                     </td>
                     <td className="corruptionPerm">
                       <div className="MonsterStats">
-                        {this.state.monster.attributes.discreet}
+                      <center>Permanent<br/></center>
+                        {this.state.Conditions.spiritual.corruption.permanent}
                       </div>
                     </td>
                   </tr>

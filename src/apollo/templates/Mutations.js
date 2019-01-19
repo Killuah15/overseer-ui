@@ -43,6 +43,17 @@ export const CREATEPROJECT = gql`
   }
 `
 
+export const DELETEPROJECT = gql`
+  mutation deleteProject($id: ID!){
+    deleteProject(id: $id){
+      id
+      title
+      description
+      rulebook
+    }
+  }
+`
+
 export const CREATECREATURE = gql`
   mutation createCreature($data: CreatureInput!) {
     createCreature(data: $data) {
