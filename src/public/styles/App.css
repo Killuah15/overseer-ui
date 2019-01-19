@@ -247,6 +247,21 @@ input {
 .ProjectType {
   font-family: "Lato", sans-serif;
   color: #282c34;
+  text-align: center;
+}
+
+#projectDelete {
+  margin-top: -0.5rem;
+  padding: 0.8rem;
+  background-color: transparent;
+
+  color: #282c34;
+  float: right;
+  font-size: 1rem;
+}
+
+#projectDelete:hover {
+  color: white;
 }
 
 .ProjectView button {
@@ -620,6 +635,14 @@ td {
   border: 0;
   outline: none;
   float: right;
+}
+
+.checkedButton img {
+  width: 1.4rem;
+}
+
+.infoButton img {
+  width: 1.5rem;
 }
 
 .infoButton {

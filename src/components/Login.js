@@ -9,8 +9,6 @@ import eye_logo from "../public/img/eye_logo.png";
 
 let mailInput = true;
 
-document.body.style.backgroundColor = "green";
-
 class Login extends React.Component {
   constructor(props, context) {
     super(props, context);

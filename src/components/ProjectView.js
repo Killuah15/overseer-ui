@@ -4,19 +4,19 @@ import Project from "./Project";
 import Modal from "react-modal";
 import { Grid, Row, Col, Alert } from "react-bootstrap";
 import { Query, Mutation } from "react-apollo";
-import _ from 'lodash';
-import { MagicSpinner } from 'react-spinners-kit';
-import ErrorMessage from '../apollo/ErrorMessage';
-import { PROJECTS } from '../apollo/templates/Queries';
-import { CREATEPROJECT, LOGOUT } from '../apollo/templates/Mutations';
-import client from '../apollo/client';
-import Rules from '../apollo/Rules';
+import _ from "lodash";
+import { MagicSpinner } from "react-spinners-kit";
+import ErrorMessage from "../apollo/ErrorMessage";
+import { PROJECTS } from "../apollo/templates/Queries";
+import { CREATEPROJECT, LOGOUT } from "../apollo/templates/Mutations";
+import client from "../apollo/client";
+import Rules from "../apollo/Rules";
 
 class ProjectView extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.rules = new Rules()
+    this.rules = new Rules();
 
     this.state = {
       selectedOption: "Symbaroum",
@@ -59,12 +59,26 @@ class ProjectView extends React.Component {
         return { projects };
       }); */
 
-      this.toggleModal()
-      createProjectMutation({ variables: { title: this.refs.projectName.value, rulebook: this.state.selectedOption }})
+      this.toggleModal();
+      createProjectMutation({
+        variables: {
+          title: this.refs.projectName.value,
+          rulebook: this.state.selectedOption
+        }
+      });
     } else {
       this.setState({ warningLabel: "Please type in a Project Name" });
     }
   }
+
+  deleteProject = id => {
+    this.setState(prevState => {
+      return {
+        projects: prevState.projects.filter(project => project.id !== id)
+      };
+    });
+    console.log("deleting id:" + id);
+  };
 
   render() {
     return (
@@ -72,60 +86,72 @@ class ProjectView extends React.Component {
         <div className="projectBackground" />
         <div className="projectContent">
           <Mutation
-          mutation={LOGOUT}
-          onCompleted={() => {this.props.history.push('/')}}
+            mutation={LOGOUT}
+            onCompleted={() => {
+              this.props.history.push("/");
+            }}
           >
-          {logout => (
-          <form onSubmit={ e => {
-            e.preventDefault()
-            client.clearStore()
-            logout()
-          }}>
-            <center>
-              <button className="navButton" type="submit">Log Out</button>
-            </center>
-          </form>
-          )}
+            {logout => (
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  client.clearStore();
+                  logout();
+                }}
+              >
+                <center>
+                  <button className="navButton" type="submit">
+                    Log Out
+                  </button>
+                </center>
+              </form>
+            )}
           </Mutation>
         </div>
         <div className="ProjectView">
           <div className="formHeader">Projects</div>
 
           <Query query={PROJECTS}>
-            {({ loading, error, data}) => {
-
-              if(loading){
-                return (
-              <center>
-                <MagicSpinner size={50} color="#6cd404" loading={loading} />
-              </center>
-                )
-              } 
-
-              if(error){
+            {({ loading, error, data }) => {
+              if (loading) {
                 return (
                   <center>
-                    <ErrorMessage error={error} message={"Unable to get Projects"} />
+                    <MagicSpinner size={50} color="#6cd404" loading={loading} />
                   </center>
-                )
+                );
               }
-              
 
-              if(_.isEmpty(data) || data.projects.length <= 0) {
-                  return <center><Alert bsStyle="info"><h4>No Projects</h4></Alert></center>
-                } else {
-                  return (
-                  data.projects.map((project, i) => (
-                      <Project name={project.title}
-                      type={this.rules.getRuleTranslation(project.rulebook)}
-                      key={project.id}
-                      projectID={project.id}
-                      rulebook={project.rulebook}
-                      />
-                    )
-                  )
-                  )
-                }
+              if (error) {
+                return (
+                  <center>
+                    <ErrorMessage
+                      error={error}
+                      message={"Unable to get Projects"}
+                    />
+                  </center>
+                );
+              }
+
+              if (_.isEmpty(data) || data.projects.length <= 0) {
+                return (
+                  <center>
+                    <Alert bsStyle="info">
+                      <h4>No Projects</h4>
+                    </Alert>
+                  </center>
+                );
+              } else {
+                return data.projects.map((project, i) => (
+                  <Project
+                    name={project.title}
+                    type={this.rules.getRuleTranslation(project.rulebook)}
+                    key={project.id}
+                    projectID={project.id}
+                    rulebook={project.rulebook}
+                    deleteProject={e => this.deleteProject(project.id)}
+                  />
+                ));
+              }
             }}
           </Query>
 
@@ -148,107 +174,109 @@ class ProjectView extends React.Component {
                 <label>{this.state.warningLabel}</label>
               </center>
 
-            <Mutation mutation={CREATEPROJECT} update={(cache, { data: { createProject }}) => {
-              const { projects } = cache.readQuery({ query: PROJECTS })
-              cache.writeQuery({
-                query: PROJECTS,
-                data: { projects: projects.concat([createProject])}
-              })
-            }}>
-            {createProject => (
-              <form onSubmit={
-                /* this.handleFormSubmit */
-                e => {
-                  e.preventDefault()
-                  this.addProject(createProject);
-                }
-                }>
-                <Grid>
-                  <Row className="">
-                    <Col md={4} mdPush={4}>
-                      <code>
-                        {
-                          <center>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  className="inputRadio"
-                                  type="radio"
-                                  value="SYMBAROUM"
-                                  checked={
-                                    this.state.selectedOption === "SYMBAROUM"
-                                  }
-                                  onChange={this.handleOptionChange}
-                                />
-                                Symbaroum
-                              </label>
-                            </div>
-                          </center>
-                        }
-                      </code>
-                    </Col>
-                    <Col md={4} mdPull={4}>
-                      <code>
-                        {
-                          <center>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="COC"
-                                  checked={
-                                    this.state.selectedOption ===
-                                    "COC"
-                                  }
-                                  onChange={this.handleOptionChange}
-                                />
-                                Call of Cthulu
-                              </label>
-                            </div>
-                          </center>
-                        }
-                      </code>
-                    </Col>
-                    <Col md={4} mdPull={4}>
-                      <code>
-                        {
-                          <center>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="DSA"
-                                  checked={
-                                    this.state.selectedOption ===
-                                    "DSA"
-                                  }
-                                  onChange={this.handleOptionChange}
-                                />
-                                Das Schwarze Auge
-                              </label>
-                            </div>
-                          </center>
-                        }
-                      </code>
-                    </Col>
-                  </Row>
-                </Grid>
-                <center>
-                <button
-                  id="createProject"
-                  /* onClick={e => {
+              <Mutation
+                mutation={CREATEPROJECT}
+                update={(cache, { data: { createProject } }) => {
+                  const { projects } = cache.readQuery({ query: PROJECTS });
+                  cache.writeQuery({
+                    query: PROJECTS,
+                    data: { projects: projects.concat([createProject]) }
+                  });
+                }}
+              >
+                {createProject => (
+                  <form
+                    onSubmit={
+                      /* this.handleFormSubmit */
+                      e => {
+                        e.preventDefault();
+                        this.addProject(createProject);
+                      }
+                    }
+                  >
+                    <Grid>
+                      <Row className="">
+                        <Col md={4} mdPush={4}>
+                          <code>
+                            {
+                              <center>
+                                <div className="radio">
+                                  <label>
+                                    <input
+                                      className="inputRadio"
+                                      type="radio"
+                                      value="SYMBAROUM"
+                                      checked={
+                                        this.state.selectedOption ===
+                                        "SYMBAROUM"
+                                      }
+                                      onChange={this.handleOptionChange}
+                                    />
+                                    Symbaroum
+                                  </label>
+                                </div>
+                              </center>
+                            }
+                          </code>
+                        </Col>
+                        <Col md={4} mdPull={4}>
+                          <code>
+                            {
+                              <center>
+                                <div className="radio">
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      value="COC"
+                                      checked={
+                                        this.state.selectedOption === "COC"
+                                      }
+                                      onChange={this.handleOptionChange}
+                                    />
+                                    Call of Cthulu
+                                  </label>
+                                </div>
+                              </center>
+                            }
+                          </code>
+                        </Col>
+                        <Col md={4} mdPull={4}>
+                          <code>
+                            {
+                              <center>
+                                <div className="radio">
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      value="DSA"
+                                      checked={
+                                        this.state.selectedOption === "DSA"
+                                      }
+                                      onChange={this.handleOptionChange}
+                                    />
+                                    Das Schwarze Auge
+                                  </label>
+                                </div>
+                              </center>
+                            }
+                          </code>
+                        </Col>
+                      </Row>
+                    </Grid>
+                    <center>
+                      <button
+                        id="createProject"
+                        /* onClick={e => {
                     this.addProject(this.state.projects);
                   }} */
-                  type="submit"
-                >
-                  create Project
-                </button>
-              </center>
-              </form>
-            )}  
-            </Mutation>
-
-              
+                        type="submit"
+                      >
+                        create Project
+                      </button>
+                    </center>
+                  </form>
+                )}
+              </Mutation>
             </Modal>
           </center>
         </div>
