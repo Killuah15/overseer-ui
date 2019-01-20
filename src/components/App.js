@@ -53,8 +53,6 @@ class App extends Component {
       }
     })
 
-    console.log(monsters)
-
     cards.data.events.forEach(element => {
       element.active = true
     })
