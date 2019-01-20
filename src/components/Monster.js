@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Clearfix, Panel, Well } from "react-bootstrap";
 import { Collapse } from "react-collapse";
 import Popover from "react-simple-popover";
+import Plopover from './Plopover';
 
 class Monster extends Component {
   constructor(props, context) {
@@ -231,39 +232,13 @@ class Monster extends Component {
               <Well>
                 <Grid>
                   <Row className="MonsterStats">
-                    <Col md={12} mdPush={12}>
-                      <code>
-                        {
-                          <div>
-                            <div
-                              href="#"
-                              ref="bla"
-                              onMouseEnter={this.handleClick.bind(this)}
-                              onMouseLeave={this.handleClick.bind(this)}
-                              onClick=""
-                              onMouseDown=""
-                              className="MonsterAbility"
-                            >
-                              Walking
-                            </div>
-
-                            <Popover
-                              placement="right"
-                              container={this.Col}
-                              target={this.refs.bla}
-                              show={this.state.open}
-                              onHide={this.handleClose.bind(this)}
-                              hideWithOutsideClick="false"
-                            >
-                              <p>
-                                Turns out walking is a suprisingly usefull
-                                skill!
-                              </p>
-                            </Popover>
-                          </div>
-                        }
-                      </code>
-                    </Col>
+                  {
+                   this.state.monster.abilities.map(ability => (
+                    <Plopover
+                      ability={ability}
+                    />
+                    ))
+                  }
                   </Row>
                 </Grid>
               </Well>

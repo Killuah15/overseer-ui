@@ -87,6 +87,16 @@ export const CREATECREATURE = gql`
         vigilant
         defense
       }
+      abilities {
+        id
+        currentRank
+        title
+        description {
+          type
+          rank
+          description
+        }
+      }
     }
   }
 `

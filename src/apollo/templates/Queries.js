@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost"
+import { gql } from 'apollo-boost'
 
 export const PROJECTS = gql`
   query projects {
@@ -65,6 +65,63 @@ export const CREATURES = gql`
         strong
         vigilant
         defense
+      }
+      abilities {
+        id
+        currentRank
+        title
+        description {
+          type
+          rank
+          description
+        }
+      }
+    }
+  }
+`
+
+export const PCREATURES = gql`
+  query pcreatures($rulebook: Rulebook!) {
+    pcreatures(rulebook: $rulebook) {
+      name
+      race
+      shadow
+      Conditions {
+        physical {
+          fitness {
+            toughness
+            painThreshold
+          }
+        }
+        spiritual {
+          corruption {
+            current
+            threshold
+            permanent
+          }
+        }
+      }
+      attributes {
+        accurate
+        cunning
+        discreet
+        persuasive
+        quick
+        resolute
+        strong
+        vigilant
+        defense
+      }
+      abilities {
+        rank
+        preset {
+          title
+          description {
+            type
+            rank
+            description
+          }
+        }
       }
     }
   }
