@@ -20,6 +20,25 @@ class Plopover extends Component {
     this.setState({open: false});
   }
 
+  renderSwitchDescriptions(ability){
+    switch(ability.currentRank) {
+      case 'NOVICE':
+        return ability.description[0].description
+        break
+      
+      case 'ADEPT':
+        return ability.description[1].description
+        break
+
+      case 'MASTER':
+        return ability.description[2].description
+        break
+
+      default:
+        break
+    }
+  }
+
   render() {
       return(
     <Col md={12} mdPush={12}>
@@ -48,10 +67,10 @@ class Plopover extends Component {
           >
             <p>
               <b>
-                {this.props.ability.description[0].rank}
+                {this.props.ability.currentRank}
                 <br />
               </b>
-              {this.props.ability.description[0].description}
+              {this.renderSwitchDescriptions(this.props.ability)}
             </p>
           </Popover>
         </div>
