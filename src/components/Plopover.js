@@ -63,7 +63,6 @@ class Plopover extends Component {
             show={this.state.open}
             onHide={this.handleClose.bind(this)}
             hideWithOutsideClick="false"
-            containerStyle={{left: 200, right: 200 }}
           >
             <p>
               <b>

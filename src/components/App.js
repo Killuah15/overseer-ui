@@ -272,19 +272,6 @@ class App extends Component {
     })
   }
 
-  /*  addMonster(monsters) {
-    newkey++;
-    this.setState(e => {
-      monsters.push({
-        name: this.state.selectedOption,
-        attack: "20",
-        id: monsters.id,
-        key: newkey
-      });
-      return { monsters };
-    });
-  } */
-
   deleteMonster = id => {
     client.mutate({
       mutation: DELETECREATURE,

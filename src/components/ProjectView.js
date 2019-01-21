@@ -50,15 +50,6 @@ class ProjectView extends React.Component {
         projectsLoading: true
       })
 
-      /* this.setState(e => {
-        this.toggleModal();
-        projects.push({
-          name: this.refs.projectName.value,
-          type: this.state.selectedOption
-        });
-        return { projects };
-      }); */
-
       this.toggleModal();
       createProjectMutation({
         variables: {
@@ -80,12 +71,6 @@ class ProjectView extends React.Component {
     this.setState({
       projectsLoading: true
     })
-    /* this.setState(prevState => {
-      return {
-        projects: prevState.projects.filter(project => project.id !== id)
-      };
-    });
-    console.log("deleting id:" + id); */
 
     const { data: { deleteProject }} = await client.mutate({
       mutation: DELETEPROJECT,
@@ -222,7 +207,6 @@ class ProjectView extends React.Component {
                 {createProject => (
                   <form
                     onSubmit={
-                      /* this.handleFormSubmit */
                       e => {
                         e.preventDefault();
                         this.addProject(createProject);
@@ -301,9 +285,6 @@ class ProjectView extends React.Component {
                     <center>
                       <button
                         id="createProject"
-                        /* onClick={e => {
-                    this.addProject(this.state.projects);
-                  }} */
                         type="submit"
                       >
                         create Project

@@ -127,9 +127,6 @@ class Login extends React.Component {
                           <Col xs={12} md={12}>
                             <center>
                               <div className="buttonWrapper">
-                                {/* <NavLink to={checkLogin()} className="" onClick={(e) => {
-                console.log('Login')
-              }}></NavLink> */}
                                 <center>
                                   <button type="submit" className="loginButton">
                                     Login

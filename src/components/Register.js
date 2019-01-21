@@ -204,15 +204,11 @@ class Register extends React.Component {
                               {
                                 <center>
                                   <div className="buttonWrapper">
-                                    {/* <NavLink to={checkRegister()} className="" onClick={(e)=>{
-                      console.log('Login')
-                    }}> */}
                                     <center>
                                       <button className="acceptButton">
                                         Accept
                                       </button>
                                     </center>
-                                    {/* </NavLink> */}
                                   </div>
                                 </center>
                               }
