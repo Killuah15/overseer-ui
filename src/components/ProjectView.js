@@ -8,7 +8,11 @@ import _ from "lodash";
 import { MagicSpinner } from "react-spinners-kit";
 import ErrorMessage from "../apollo/ErrorMessage";
 import { PROJECTS } from "../apollo/templates/Queries";
-import { CREATEPROJECT, LOGOUT, DELETEPROJECT } from "../apollo/templates/Mutations";
+import {
+  CREATEPROJECT,
+  LOGOUT,
+  DELETEPROJECT
+} from "../apollo/templates/Mutations";
 import client from "../apollo/client";
 import Rules from "../apollo/Rules";
 
@@ -22,7 +26,7 @@ class ProjectView extends React.Component {
       selectedOption: "Symbaroum",
       warningLabel: "",
       isActive: false,
-      projectsLoading: false      
+      projectsLoading: false
     };
   }
 
@@ -45,10 +49,9 @@ class ProjectView extends React.Component {
 
   addProject(createProjectMutation) {
     if (this.refs.projectName.value !== "") {
-
       this.setState({
         projectsLoading: true
-      })
+      });
 
       this.toggleModal();
       createProjectMutation({
@@ -63,37 +66,40 @@ class ProjectView extends React.Component {
 
     this.setState({
       projectsLoading: false
-    })
+    });
   }
 
   deleteProject = async id => {
-
     this.setState({
       projectsLoading: true
-    })
+    });
 
-    const { data: { deleteProject }} = await client.mutate({
+    const {
+      data: { deleteProject }
+    } = await client.mutate({
       mutation: DELETEPROJECT,
       variables: {
         id
       },
-      update: (cache, { data: { deleteProject }}) => {
-        const { projects } = cache.readQuery({ query: PROJECTS })
+      update: (cache, { data: { deleteProject } }) => {
+        const { projects } = cache.readQuery({ query: PROJECTS });
 
         cache.writeQuery({
           query: PROJECTS,
           data: {
-            projects: projects.filter(project => project.id !== deleteProject.id)
+            projects: projects.filter(
+              project => project.id !== deleteProject.id
+            )
           }
-        })
+        });
       }
-    })
+    });
 
     console.log(deleteProject);
 
     this.setState({
       projectsLoading: false
-    })
+    });
   };
 
   render() {
@@ -128,7 +134,11 @@ class ProjectView extends React.Component {
           <div className="formHeader">Projects</div>
 
           <center>
-            <MagicSpinner loading={this.state.projectsLoading} size={50} color="#6cd404" />
+            <MagicSpinner
+              loading={this.state.projectsLoading}
+              size={50}
+              color="#6cd404"
+            />
           </center>
 
           <Query query={PROJECTS}>
@@ -155,8 +165,8 @@ class ProjectView extends React.Component {
               if (_.isEmpty(data) || data.projects.length <= 0) {
                 return (
                   <center>
-                    <Alert bsStyle="info">
-                      <h4>No Projects</h4>
+                    <Alert bsStyle="">
+                      <p>No Projects</p>
                     </Alert>
                   </center>
                 );
@@ -206,12 +216,10 @@ class ProjectView extends React.Component {
               >
                 {createProject => (
                   <form
-                    onSubmit={
-                      e => {
-                        e.preventDefault();
-                        this.addProject(createProject);
-                      }
-                    }
+                    onSubmit={e => {
+                      e.preventDefault();
+                      this.addProject(createProject);
+                    }}
                   >
                     <Grid>
                       <Row className="">
@@ -283,10 +291,7 @@ class ProjectView extends React.Component {
                       </Row>
                     </Grid>
                     <center>
-                      <button
-                        id="createProject"
-                        type="submit"
-                      >
+                      <button id="createProject" type="submit">
                         create Project
                       </button>
                     </center>

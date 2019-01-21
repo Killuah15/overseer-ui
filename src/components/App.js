@@ -1,34 +1,42 @@
-import React, { Component } from 'react'
-import '../public/styles/App.css'
-import { Button, Grid, Row, Col, Clearfix, Panel, Alert } from 'react-bootstrap'
-import EventCard from './EventCard'
-import Trash from './Trash'
-import Monster from './Monster'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { NavLink } from 'react-router-dom'
-import { DragDropContext } from 'react-dnd'
-import { Query, Mutation } from 'react-apollo'
-import { MagicSpinner } from 'react-spinners-kit'
-import _ from 'lodash'
-import { EVENTS, CREATURES, PCREATURES } from '../apollo/templates/Queries'
+import React, { Component } from "react";
+import "../public/styles/App.css";
+import {
+  Button,
+  Grid,
+  Row,
+  Col,
+  Clearfix,
+  Panel,
+  Alert
+} from "react-bootstrap";
+import EventCard from "./EventCard";
+import Trash from "./Trash";
+import Monster from "./Monster";
+import HTML5Backend from "react-dnd-html5-backend";
+import { NavLink } from "react-router-dom";
+import { DragDropContext } from "react-dnd";
+import { Query, Mutation } from "react-apollo";
+import { MagicSpinner } from "react-spinners-kit";
+import _ from "lodash";
+import { EVENTS, CREATURES, PCREATURES } from "../apollo/templates/Queries";
 import {
   CREATECREATURE,
   DELETECREATURE,
   CREATEEVENT,
   DELETEEVENT,
   UPDATEEVENT
-} from '../apollo/templates/Mutations'
-import ErrorMessage from '../apollo/ErrorMessage'
-import client from '../apollo/client'
-const update = require('immutability-helper')
+} from "../apollo/templates/Mutations";
+import ErrorMessage from "../apollo/ErrorMessage";
+import client from "../apollo/client";
+const update = require("immutability-helper");
 
-var newkey = 5
+var newkey = 5;
 
 class App extends Component {
   state = {
     trashVis: true,
-    selectedOption: '',
-    textValue: '',
+    selectedOption: "",
+    textValue: "",
     monsterData: [],
     monsters: [],
     cards: [],
@@ -36,7 +44,7 @@ class App extends Component {
     rulebook: this.props.location.state.rulebook,
     currentEvent: null,
     eventsLoading: false
-  }
+  };
 
   async componentDidMount() {
     const cards = await client.query({
@@ -44,34 +52,34 @@ class App extends Component {
       variables: {
         projectID: this.state.projectID
       }
-    })
+    });
 
     const monsters = await client.query({
       query: PCREATURES,
       variables: {
         rulebook: this.state.rulebook
       }
-    })
+    });
 
     cards.data.events.forEach(element => {
-      element.active = true
-    })
+      element.active = true;
+    });
 
     this.setState({
       cards: cards.data.events,
       monsterData: monsters.data.pcreatures,
       selectedOption: monsters.data.pcreatures[0].name,
       currentEvent: cards.data.events[0] ? cards.data.events[0].id : null,
-      textValue: cards.data.events[0] ? cards.data.events[0].title : ''
-    })
+      textValue: cards.data.events[0] ? cards.data.events[0].title : ""
+    });
   }
 
   updateEventIndices = () => {
-    if (this.state.eventsLoading) return
+    if (this.state.eventsLoading) return;
 
     this.setState({
       eventsLoading: true
-    })
+    });
 
     this.state.cards.map(card => {
       client.mutate({
@@ -85,20 +93,20 @@ class App extends Component {
             )
           }
         }
-      })
-    })
+      });
+    });
 
     this.setState({
       eventsLoading: false
-    })
-  }
+    });
+  };
 
   deleteItem = async id => {
-    if (this.state.eventsLoading) return
+    if (this.state.eventsLoading) return;
 
     this.setState({
       eventsLoading: true
-    })
+    });
 
     const {
       data: { deleteEvent }
@@ -113,7 +121,7 @@ class App extends Component {
           variables: {
             projectID: this.state.projectID
           }
-        })
+        });
 
         cache.writeQuery({
           query: EVENTS,
@@ -123,35 +131,35 @@ class App extends Component {
           data: {
             events: events.filter(event => event.id !== deleteEvent.id)
           }
-        })
+        });
       }
-    })
+    });
 
     this.setState(prevState => {
       return {
         cards: prevState.cards.filter(card => card.id !== deleteEvent.id),
         currentEvent:
           prevState.currentEvent === id ? null : prevState.currentEvent,
-        textValue: prevState.currentEvent === id ? '' : prevState.textValue,
+        textValue: prevState.currentEvent === id ? "" : prevState.textValue,
         eventsLoading: false
-      }
-    })
-  }
+      };
+    });
+  };
 
   toggleChecked(index) {
-    const card = this.state.cards[index]
+    const card = this.state.cards[index];
 
     this.setState(e => {
       if (card.active) {
-        card.active = false
-        return { card }
+        card.active = false;
+        return { card };
       } else {
-        card.active = true
-        return { card }
+        card.active = true;
+        return { card };
       }
-    })
+    });
 
-    console.log(card.eventRole)
+    console.log(card.eventRole);
   }
 
   async showEvent(event) {
@@ -160,27 +168,27 @@ class App extends Component {
       variables: {
         eventID: event.id
       }
-    })
+    });
 
     this.setState({
       textValue: event.title,
       currentEvent: event.id,
       monsters: monstersOfEvent.data.creatures
-    })
+    });
 
-    console.log(event.eventRole)
+    console.log(event.eventRole);
   }
 
   toggleTrashVisible(vis) {
     this.setState({
       trashVis: !vis
-    })
-    console.log(trashVis)
+    });
+    console.log(trashVis);
   }
 
   moveCard = (dragIndex, hoverIndex) => {
-    const { cards } = this.state
-    const dragCard = cards[dragIndex]
+    const { cards } = this.state;
+    const dragCard = cards[dragIndex];
 
     this.setState(
       update(this.state, {
@@ -188,17 +196,17 @@ class App extends Component {
           $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]]
         }
       })
-    )
-  }
+    );
+  };
 
   async addCard(eType) {
-    if (this.state.eventsLoading) return
+    if (this.state.eventsLoading) return;
 
     this.setState({
       eventsLoading: true
-    })
+    });
 
-    if (this.refs.eventText.value !== '') {
+    if (this.refs.eventText.value !== "") {
       const {
         data: { createEvent }
       } = await client.mutate({
@@ -218,7 +226,7 @@ class App extends Component {
             variables: {
               projectID: this.state.projectID
             }
-          })
+          });
 
           cache.writeQuery({
             query: EVENTS,
@@ -228,11 +236,11 @@ class App extends Component {
             data: {
               events: events.concat([createEvent])
             }
-          })
+          });
         }
-      })
+      });
 
-      createEvent.active = true
+      createEvent.active = true;
 
       this.setState({
         cards: [...this.state.cards, createEvent],
@@ -249,28 +257,28 @@ class App extends Component {
             ? createEvent.title
             : this.state.textValue,
         eventsLoading: false
-      })
+      });
 
-      this.refs.eventText.value = ''
-      return this.state.cards
+      this.refs.eventText.value = "";
+      return this.state.cards;
     }
   }
 
   fillMonsterList() {
-    let selection = []
+    let selection = [];
 
     for (let i = 0; i < this.state.monsterData.length; i++) {
-      selection.push(<option>{this.state.monsterData[i].name}</option>)
+      selection.push(<option>{this.state.monsterData[i].name}</option>);
     }
 
-    return selection
+    return selection;
   }
 
   handleOptionChange = changeEvent => {
     this.setState({
       selectedOption: changeEvent.target.value
-    })
-  }
+    });
+  };
 
   deleteMonster = id => {
     client.mutate({
@@ -284,7 +292,7 @@ class App extends Component {
           variables: {
             eventID: this.state.currentEvent
           }
-        })
+        });
 
         cache.writeQuery({
           query: CREATURES,
@@ -296,10 +304,10 @@ class App extends Component {
               creature => creature.id !== deleteCreature.id
             )
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   render() {
     return (
@@ -336,7 +344,7 @@ class App extends Component {
                                 loading={loading}
                               />
                             </center>
-                          )
+                          );
                         }
 
                         if (error) {
@@ -344,20 +352,20 @@ class App extends Component {
                             <center>
                               <ErrorMessage
                                 error={error}
-                                message={'Unable to get Projects'}
+                                message={"Unable to get Projects"}
                               />
                             </center>
-                          )
+                          );
                         }
 
                         if (_.isEmpty(data) || data.creatures.length <= 0) {
                           return (
                             <center>
-                              <Alert bsStyle="info">
-                                <h4>No Creatures in this Event</h4>
+                              <Alert bsStyle="">
+                                <p>No Creatures in this Event</p>
                               </Alert>
                             </center>
-                          )
+                          );
                         } else {
                           return (
                             <div className="eventInfoArea" id="style-1">
@@ -378,7 +386,7 @@ class App extends Component {
                                 />
                               ))}
                             </div>
-                          )
+                          );
                         }
                       }}
                     </Query>
@@ -398,7 +406,7 @@ class App extends Component {
                             variables: {
                               eventID: this.state.currentEvent
                             }
-                          })
+                          });
 
                           cache.writeQuery({
                             query: CREATURES,
@@ -408,30 +416,33 @@ class App extends Component {
                             data: {
                               creatures: creatures.concat(createCreature)
                             }
-                          })
+                          });
                         }}
                       >
                         {createCreature => (
                           <form
                             onSubmit={e => {
-                              e.preventDefault()
-                              const monster = this.state.monsterData.filter(monster => monster.name === this.state.selectedOption)[0]
+                              e.preventDefault();
+                              const monster = this.state.monsterData.filter(
+                                monster =>
+                                  monster.name === this.state.selectedOption
+                              )[0];
 
-                              let abilities = monster.abilities.map((ability) => {
-
-                                  const descriptions = ability.preset.description.map(description => ({
+                              let abilities = monster.abilities.map(ability => {
+                                const descriptions = ability.preset.description.map(
+                                  description => ({
                                     type: description.type,
                                     rank: description.rank,
                                     description: description.description
-                                  }))
+                                  })
+                                );
 
-                                  return ({
+                                return {
                                   currentRank: ability.rank,
                                   title: ability.preset.title,
                                   descriptions
-                                  })
-                                }
-                              )
+                                };
+                              });
 
                               createCreature({
                                 variables: {
@@ -455,11 +466,14 @@ class App extends Component {
                                       spiritual: {
                                         corruption: {
                                           current:
-                                            monster.Conditions.spiritual.corruption.current,
+                                            monster.Conditions.spiritual
+                                              .corruption.current,
                                           threshold:
-                                            monster.Conditions.spiritual.corruption.threshold,
+                                            monster.Conditions.spiritual
+                                              .corruption.threshold,
                                           permanent:
-                                            monster.Conditions.spiritual.corruption.permanent
+                                            monster.Conditions.spiritual
+                                              .corruption.permanent
                                         }
                                       }
                                     },
@@ -477,7 +491,7 @@ class App extends Component {
                                     abilities
                                   }
                                 }
-                              })
+                              });
                             }}
                           >
                             <button type="submit">add</button>
@@ -539,7 +553,7 @@ class App extends Component {
                           <button
                             className="createButtonDefault"
                             onClick={e => {
-                              this.addCard('GENERIC')
+                              this.addCard("GENERIC");
                             }}
                           >
                             Default
@@ -547,7 +561,7 @@ class App extends Component {
                           <button
                             className="createButtonCombat"
                             onClick={e => {
-                              this.addCard('COMBAT')
+                              this.addCard("COMBAT");
                             }}
                           >
                             Combat
@@ -555,7 +569,7 @@ class App extends Component {
                           <button
                             className="createButtonQuest"
                             onClick={e => {
-                              this.addCard('QUEST')
+                              this.addCard("QUEST");
                             }}
                           >
                             Quest
@@ -570,8 +584,8 @@ class App extends Component {
           </Row>
         </Grid>
       </div>
-    )
+    );
   }
 }
 
-export default DragDropContext(HTML5Backend)(App)
+export default DragDropContext(HTML5Backend)(App);
